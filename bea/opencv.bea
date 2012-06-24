@@ -20,6 +20,7 @@
 @include "constants.bea"
 @include "types.bea"
 @include "mat.bea"
+@include "videocap.bea"
 @include "cv.bea"
 
 	

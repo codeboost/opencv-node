@@ -1,0 +1,22 @@
+@namespace cv	
+	@class VideoCapture "VideoCapture"
+		VideoCapture()
+		VideoCapture(const std::string& filename)
+		VideoCapture(int device)
+		bool open(const std::string& filename)
+		bool open(int device)
+		bool isOpened()
+		void release()
+		bool grab()
+		bool retrieve(Mat& image, int channel=0)
+		bool read(Mat& image)
+		double get(int propId)
+		bool set(int propId, double value)
+
+	@class VideoWriter
+		VideoWriter()
+		VideoWriter(const std::string& filename, int fourcc, double fps, Size frameSize, bool isColor=true)
+
+		bool open(const std::string& filename, int fourcc, double fps, Size frameSize, bool isColor=true)
+		bool isOpened()
+		void write(const Mat& image)
