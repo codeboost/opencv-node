@@ -1,1 +1,1 @@
-bea opencv.bea -o ../ -f 
+bea opencv.bea -o ../src -f 

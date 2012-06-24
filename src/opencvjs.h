@@ -62,6 +62,41 @@ namespace opencvjs {
 }
 
 namespace opencvjs {
+	class JVideoCapture {
+		protected:
+			//Exported methods
+			static v8::Handle<v8::Value> __constructor(const v8::Arguments& args);
+			static v8::Handle<v8::Value> open(const v8::Arguments& args);
+			static v8::Handle<v8::Value> isOpened(const v8::Arguments& args);
+			static v8::Handle<v8::Value> release(const v8::Arguments& args);
+			static v8::Handle<v8::Value> grab(const v8::Arguments& args);
+			static v8::Handle<v8::Value> retrieve(const v8::Arguments& args);
+			static v8::Handle<v8::Value> read(const v8::Arguments& args);
+			static v8::Handle<v8::Value> get(const v8::Arguments& args);
+			static v8::Handle<v8::Value> set(const v8::Arguments& args);
+			static v8::Handle<v8::Value> __postAllocator(const v8::Arguments& args);
+		public:
+			static void _InitJSObject(v8::Handle<v8::Object> target);
+	};
+	
+}
+
+namespace opencvjs {
+	class JVideoWriter {
+		protected:
+			//Exported methods
+			static v8::Handle<v8::Value> __constructor(const v8::Arguments& args);
+			static v8::Handle<v8::Value> open(const v8::Arguments& args);
+			static v8::Handle<v8::Value> isOpened(const v8::Arguments& args);
+			static v8::Handle<v8::Value> write(const v8::Arguments& args);
+			static v8::Handle<v8::Value> __postAllocator(const v8::Arguments& args);
+		public:
+			static void _InitJSObject(v8::Handle<v8::Object> target);
+	};
+	
+}
+
+namespace opencvjs {
 	class JOpenCV {
 		protected:
 			//Exported methods

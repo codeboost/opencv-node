@@ -1,8 +1,14 @@
+Opencvjs
 
-Building on MacOS X:
+
+=Purpose=
+Expose opencv to the node environment.
+
+
+=Building on MacOS X=
 	$ brew install opencv --build32
 	$ node-waf configure build
-
+	$ coffee tests
 
 If you want to make changes to the API, bea must be installed:
 

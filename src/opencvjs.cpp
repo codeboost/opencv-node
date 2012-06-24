@@ -209,6 +209,36 @@ namespace bea {
 		
 	};
 	
+	template<> struct Convert<cv::VideoCapture*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::VideoCapture>::Is(v);
+		}
+		
+		static cv::VideoCapture* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::VideoCapture>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::VideoCapture* const& v) {
+			return bea::ExposedClass<cv::VideoCapture>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::VideoWriter*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::VideoWriter>::Is(v);
+		}
+		
+		static cv::VideoWriter* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::VideoWriter>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::VideoWriter* const& v) {
+			return bea::ExposedClass<cv::VideoWriter>::ToJS(v);
+		}
+		
+	};
+	
 }
 
 DECLARE_EXPOSED_CLASS(cv::Mat);
@@ -855,6 +885,227 @@ namespace opencvjs {
 		obj->exposeProperty("empty", accGet_empty, accSet_empty);
 		obj->exposeProperty("depth", accGet_depth, accSet_depth);
 		obj->exposeProperty("total", accGet_total, accSet_total);
+		//Expose object to the Javascript
+		obj->exposeTo(target);
+	}
+	
+}
+
+DECLARE_EXPOSED_CLASS(cv::VideoCapture);
+namespace opencvjs {
+	v8::Handle<v8::Value> JVideoCapture::__constructor(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//VideoCapture(const std::string& filename)
+		if (bea::Convert<std::string>::Is(args[0])) {
+			std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
+			cv::VideoCapture* fnRetVal = new cv::VideoCapture(filename);
+			return v8::External::New(fnRetVal);
+		}
+		//VideoCapture(int device)
+		if (bea::Convert<int>::Is(args[0])) {
+			int device = bea::Convert<int>::FromJS(args[0], 0);
+			cv::VideoCapture* fnRetVal = new cv::VideoCapture(device);
+			return v8::External::New(fnRetVal);
+		}
+		//VideoCapture()
+		if (args.Length() == 0) {
+			cv::VideoCapture* fnRetVal = new cv::VideoCapture();
+			return v8::External::New(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::open(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//bool open(const std::string& filename)
+		if (bea::Convert<std::string>::Is(args[0])) {
+			std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
+			cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+			bool fnRetVal = _this->open(filename);
+			return bea::Convert<bool>::ToJS(fnRetVal);
+		}
+		//bool open(int device)
+		if (bea::Convert<int>::Is(args[0])) {
+			int device = bea::Convert<int>::FromJS(args[0], 0);
+			cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+			bool fnRetVal = _this->open(device);
+			return bea::Convert<bool>::ToJS(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::isOpened(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//bool isOpened()
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->isOpened();
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::release(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void release()
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		_this->release();
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::grab(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//bool grab()
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->grab();
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::retrieve(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//bool retrieve(Mat& image, int channel=0)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		int channel = bea::Optional<int>::FromJS(args, 1, 0);
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->retrieve(*image, channel);
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::read(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//bool read(Mat& image)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->read(*image);
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::get(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//double get(int propId)
+		int propId = bea::Convert<int>::FromJS(args[0], 0);
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		double fnRetVal = _this->get(propId);
+		return bea::Convert<double>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::set(const v8::Arguments& args) {
+		METHOD_BEGIN(2);
+		//bool set(int propId, double value)
+		int propId = bea::Convert<int>::FromJS(args[0], 0);
+		double value = bea::Convert<double>::FromJS(args[1], 1);
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->set(propId, value);
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoCapture::__postAllocator(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void __postAllocator()
+		cv::VideoCapture* _this = bea::Convert<cv::VideoCapture*>::FromJS(args.This(), 0);
+		return args.This();
+		METHOD_END();
+	}
+	
+	void JVideoCapture::_InitJSObject(v8::Handle<v8::Object> target) {
+		bea::ExposedClass<cv::VideoCapture>* obj = EXPOSE_CLASS(cv::VideoCapture, "VideoCapture");
+		//Exposed Methods
+		obj->setConstructor(__constructor);
+		obj->exposeMethod("open", open);
+		obj->exposeMethod("isOpened", isOpened);
+		obj->exposeMethod("release", release);
+		obj->exposeMethod("grab", grab);
+		obj->exposeMethod("retrieve", retrieve);
+		obj->exposeMethod("read", read);
+		obj->exposeMethod("get", get);
+		obj->exposeMethod("set", set);
+		obj->setPostAllocator(__postAllocator);
+		//Accessors
+		//Expose object to the Javascript
+		obj->exposeTo(target);
+	}
+	
+}
+
+DECLARE_EXPOSED_CLASS(cv::VideoWriter);
+namespace opencvjs {
+	v8::Handle<v8::Value> JVideoWriter::__constructor(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//VideoWriter(const std::string& filename, int fourcc, double fps, Size frameSize, bool isColor=true)
+		if (bea::Convert<std::string>::Is(args[0]) && bea::Convert<int>::Is(args[1]) && bea::Convert<double>::Is(args[2]) && bea::Convert<cv::Size>::Is(args[3]) && bea::Optional<bool>::Is(args, 4)) {
+			std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
+			int fourcc = bea::Convert<int>::FromJS(args[1], 1);
+			double fps = bea::Convert<double>::FromJS(args[2], 2);
+			cv::Size frameSize = bea::Convert<cv::Size>::FromJS(args[3], 3);
+			bool isColor = bea::Optional<bool>::FromJS(args, 4, true);
+			cv::VideoWriter* fnRetVal = new cv::VideoWriter(filename, fourcc, fps, frameSize, isColor);
+			return v8::External::New(fnRetVal);
+		}
+		//VideoWriter()
+		if (args.Length() == 0) {
+			cv::VideoWriter* fnRetVal = new cv::VideoWriter();
+			return v8::External::New(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoWriter::open(const v8::Arguments& args) {
+		METHOD_BEGIN(4);
+		//bool open(const std::string& filename, int fourcc, double fps, Size frameSize, bool isColor=true)
+		std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
+		int fourcc = bea::Convert<int>::FromJS(args[1], 1);
+		double fps = bea::Convert<double>::FromJS(args[2], 2);
+		cv::Size frameSize = bea::Convert<cv::Size>::FromJS(args[3], 3);
+		bool isColor = bea::Optional<bool>::FromJS(args, 4, true);
+		cv::VideoWriter* _this = bea::Convert<cv::VideoWriter*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->open(filename, fourcc, fps, frameSize, isColor);
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoWriter::isOpened(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//bool isOpened()
+		cv::VideoWriter* _this = bea::Convert<cv::VideoWriter*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->isOpened();
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoWriter::write(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//void write(const Mat& image)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::VideoWriter* _this = bea::Convert<cv::VideoWriter*>::FromJS(args.This(), 0);
+		_this->write(*image);
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JVideoWriter::__postAllocator(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void __postAllocator()
+		cv::VideoWriter* _this = bea::Convert<cv::VideoWriter*>::FromJS(args.This(), 0);
+		return args.This();
+		METHOD_END();
+	}
+	
+	void JVideoWriter::_InitJSObject(v8::Handle<v8::Object> target) {
+		bea::ExposedClass<cv::VideoWriter>* obj = EXPOSE_CLASS(cv::VideoWriter, "VideoWriter");
+		//Exposed Methods
+		obj->setConstructor(__constructor);
+		obj->exposeMethod("open", open);
+		obj->exposeMethod("isOpened", isOpened);
+		obj->exposeMethod("write", write);
+		obj->setPostAllocator(__postAllocator);
+		//Accessors
 		//Expose object to the Javascript
 		obj->exposeTo(target);
 	}
@@ -2537,6 +2788,8 @@ namespace opencvjs {
 namespace opencvjs {
 	void Project::expose(v8::Handle<v8::Object> target) {
 		JMat::_InitJSObject(target);
+		JVideoCapture::_InitJSObject(target);
+		JVideoWriter::_InitJSObject(target);
 		JOpenCV::_InitJSObject(target);
 		ExposeConstants(target);
 	}
