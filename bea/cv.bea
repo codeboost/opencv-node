@@ -1,0 +1,272 @@
+@namespace cv
+	@static OpenCV 
+
+		void GaussianBlur(const Mat& src, Mat& dst, Size ksize, double sigmaX, double sigmaY=0, int borderType=cv::BORDER_DEFAULT)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+
+		void Canny(const Mat& image, Mat& edges, double threshold1, double threshold2, int apertureSize=3, bool L2gradient=false)
+			apertureSize &= INT_MAX;
+			REQUIRE_SAME_SIZE_TYPE(image, edges);
+			THROW_IF_NOT(image->channels() == 1, "Image must have 1 channel");
+			THROW_IF_NOT( !((apertureSize & 1) == 0 || apertureSize < 3 || apertureSize > 7 ), "Invalid aperture size");
+			
+		void bilateralFilter(const Mat& src, Mat& dst, int d, double sigmaColor, double sigmaSpace, int borderType=cv::BORDER_DEFAULT)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+			
+		void cvtColor(const Mat& src, Mat& dst, int code, int dstCn=0)
+
+		void addWeighted(const Mat& src1, double alpha, const Mat& src2, double beta, double gamma, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+			
+		void resize(const Mat& src, Mat& dst, Size dsize, double fx=0, double fy=0, int interpolation=cv::INTER_LINEAR)
+			THROW_IF_NOT((dsize.width > 0 && dsize.height > 0) || (fx > 0 && fy > 0) , "Invalid size or fx fy");
+			THROW_IF_NOT(src->total() > 0 && dst->total() > 0, "One or both images are invalid");
+			
+			
+		double threshold(const Mat& src, Mat& dst, double thresh, double maxVal, int thresholdType)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+			
+		void warpAffine(const Mat& src, Mat& dst, const Mat& M, Size dsize, int flags=cv::INTER_LINEAR, int borderMode=cv::BORDER_CONSTANT, const Scalar& borderValue=cv::Scalar())
+			REQUIRE_SAME_TYPE(src, dst);
+			THROW_IF_NOT (dst->size() == dsize, "Destination matrix must have same size as size parameter");
+			THROW_IF_NOT(M->rows == 2 && M->cols == 3, "M matrix must be a 2x3 matrix");
+			
+		Mat getRotationMatrix2D(Point2f center, double angle, double scale)
+			
+		void namedWindow(const std::string& winname, int flags)
+		void imshow(const std::string& winname, const Mat& image)
+			
+		void dilate(const Mat& src, Mat& dst, const Mat& element, Point anchor=Point(-1, -1), int iterations=1, int borderType=cv::BORDER_CONSTANT, const Scalar& borderValue=cv::morphologyDefaultBorderValue())
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+
+		void absdiff(const Mat& src1, const Mat& src2, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+				
+		void absdiff(const Mat& src1, const Scalar& sc, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+				
+		void add(const Mat& src1, const Mat& src2, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+			
+		void add(const Mat& src1, const Mat& src2, Mat& dst, const Mat& mask)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+			THROW_IF_NOT(bea::Convert<cv::Mat*>::Is(args[3]) && mask->channels() == 1, "Mask must be a single-channel 8 bit matrix");
+			
+		void add(const Mat& src1, const Scalar& sc, Mat& dst, const Mat& mask=cv::Mat())
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+			THROW_IF_NOT(bea::Convert<cv::Mat*>::Is(args[3]) && mask->channels() == 1, "Mask must be a single-channel 8 bit matrix");
+			
+			
+		void addWeighted(const Mat& src1, double alpha, const Mat& src2, double beta, double gamma, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+				
+		void bitwise_and(const Mat& src1, const Mat& src2, Mat& dst, const Mat& mask=cv::Mat())
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+
+		void bitwise_and(const Mat& src1, const Scalar& sc, Mat& dst, const Mat& mask=cv::Mat())
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+
+		void bitwise_not(const Mat& src, Mat& dst)
+
+		void bitwise_or(const Mat& src1, const Mat& src2, Mat& dst, const Mat& mask=cv::Mat())
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			
+		void bitwise_or(const Mat& src1, const Scalar& sc, Mat& dst, const Mat& mask=cv::Mat())
+
+		void bitwise_xor(const Mat& src1, const Mat& src2, Mat& dst, const Mat& mask=cv::Mat())
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			
+		void bitwise_xor(const Mat& src1, const Scalar& sc, Mat& dst, const Mat& mask=cv::Mat())
+
+		void calcCovarMatrix(const Mat& samples, Mat& covar, Mat& mean, int flags, int ctype=CV_64F)
+			THROW_IF_NOT(covar->type() == ctype, "Covar matrix must have same type as ctype");
+			
+		void cartToPolar(const Mat& x, const Mat& y, Mat& magnitude, Mat& angle, bool angleInDegrees=false)
+			REQUIRE_SAME_SIZE_TYPE(x, y); 
+			REQUIRE_SAME_SIZE_TYPE(x, magnitude); 
+			REQUIRE_SAME_SIZE_TYPE(x, angle); 
+			
+
+		void compare(const Mat& src1, const Mat& src2, Mat& dst, int cmpop)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE(src1, dst);
+			THROW_IF_NOT(dst->type() == CV_8UC1, "Destination must have type CV_8UC1");
+				
+		void compare(const Mat& src1, double value, Mat& dst, int cmpop)	
+			REQUIRE_SAME_SIZE(src1, dst);
+			THROW_IF_NOT(dst->type() == CV_8UC1, "Destination must have type CV_8UC1");
+			
+		void completeSymm(Mat& mtx, bool lowerToUpper=false)
+		void convertScaleAbs(const Mat& src, Mat& dst, double alpha=1, double beta=0)
+		int countNonZero(const Mat& mtx)
+		float cubeRoot(float val)
+		void dct(const Mat& src, Mat& dst, int flags=0)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+
+		void dft(const Mat& src, Mat& dst, int flags=0, int nonzeroRows=0)
+
+		void divide(double scale, const Mat& src2, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src2, dst);
+			
+		void divide(const Mat& src1, const Mat& src2, Mat& dst, double scale=1)
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);	
+
+		double determinant(const Mat& mtx)
+			THROW_IF_NOT(mtx->type() == CV_32FC1 || mtx->type() == CV_64FC1, "Matrix must be of type CV_32FC1 or CV_64FC1 and have square size");
+
+		bool eigen(const Mat& src, Mat& eigenvalues, int lowindex=-1, int highindex=-1)
+			
+		bool eigen(const Mat& src, Mat& eigenvalues, Mat& eigenvectors, int lowindex=-1, int highindex=-1)	
+			REQUIRE_SAME_SIZE_TYPE(src, eigenvectors);
+
+		void exp(const Mat& src, Mat& dst)
+		float fastAtan2(float y, float x)	
+
+
+		void flip(const Mat& src, Mat& dst, int flipCode)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+
+		void gemm(const Mat& src1, const Mat& src2, double alpha, const Mat& src3, double beta, Mat& dst, int flags=0)
+			THROW_IF_NOT(src1 && src2 && src3 && dst, "Invalid matrix argument");
+			int type = src1->type(); 
+			THROW_IF_NOT(type == CV_32FC1 || type == CV_64FC1 || type == CV_32FC2 || type == CV_64FC2, "Unsupported matrix type");
+			REQUIRE_SAME_TYPE(src1, src2);
+			REQUIRE_SAME_TYPE(src1, src3);
+			REQUIRE_SAME_SIZE_TYPE(src1, dst);
+			
+		void idct(const Mat& src, Mat& dst, int flags=0)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+			
+		void idft(const Mat& src, Mat& dst, int flags=0, int outputRows=0)
+			//TODO: Check flags and determine if dst type is good
+			
+		void inRange(const Mat& src, const Mat& lowerb, const Mat& upperb, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src, upperb);
+			REQUIRE_SAME_SIZE_TYPE(src, lowerb);
+			REQUIRE_SAME_SIZE(src, dst); 
+			THROW_IF_NOT(dst->depth() == CV_8U, "Destination must be a CV_8U matrix");
+			
+		void inRange(const Mat& src, const Scalar& lowerb, const Scalar& upperb, Mat& dst)	
+			REQUIRE_SAME_SIZE(src, dst); 
+			THROW_IF_NOT(dst->depth() == CV_8U, "Destination must be a CV_8U matrix");
+
+		double invert(const Mat& src, Mat& dst, int method=cv::DECOMP_LU)
+			REQUIRE_SAME_TYPE(src, dst);
+			
+		void log(const Mat& src, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
+			
+		void LUT(const Mat& src, const Mat& lut, Mat& dst)
+			//TODO: check LUT size/channels
+			THROW_IF_NOT(src->channels() == dst->channels() && dst->depth() == lut->depth(), "Destination matrix must have the same size and the same number of channels as src , and the same depth as lut"); 
+
+		void magnitude(const Mat& x, const Mat& y, Mat& magnitude)
+			REQUIRE_SAME_SIZE(x, y); 
+			REQUIRE_SAME_SIZE_TYPE(x, magnitude);
+		double Mahalanobis(const Mat& vec1, const Mat& vec2, const Mat& icovar)
+
+		void max(const Mat& src1, double value, Mat& dst)	
+			REQUIRE_SAME_SIZE_TYPE(src1, dst); 
+			
+		void max(const Mat& src1, const Mat& src2, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, dst); 
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+
+		Scalar mean(const Mat& mtx)
+		Scalar mean(const Mat& mtx, const Mat& mask)
+			
+		void meanStdDev(const Mat& mtx, Scalar& mean, Scalar& stddev, const Mat& mask=cv::Mat())
+			//TODO: check mask type/size
+			
+		void min(const Mat& src1, double value, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, dst); 
+			
+		void min(const Mat& src1, const Mat& src2, Mat& dst)
+			REQUIRE_SAME_SIZE_TYPE(src1, dst); 
+			REQUIRE_SAME_SIZE_TYPE(src1, src2);
+			
+		void mulSpectrums(const Mat& src1, const Mat& src2, Mat& dst, int flags, bool conj=false)
+		double norm(const Mat& src1, int normType=cv::NORM_L2)
+		double norm(const Mat& src1, const Mat& src2, int normType=cv::NORM_L2)
+		double norm(const Mat& src1, int normType, const Mat& mask)
+		double norm(const Mat& src1, const Mat& src2, int normType, const Mat& mask)
+		void multiply(const Mat& src1, const Mat& src2, Mat& dst, double scale=1)
+		void mulTransposed(const Mat& src, Mat& dst, bool aTa, const Mat& delta=cv::Mat(), double scale=1, int rtype=-1)
+		void normalize(const Mat& src, Mat& dst, double alpha=1, double beta=0, int normType=cv::NORM_L2, int rtype=-1, const Mat& mask=cv::Mat())
+		void perspectiveTransform(const Mat& src, Mat& dst, const Mat& mtx)
+		void phase(const Mat& x, const Mat& y, Mat& angle, bool angleInDegrees=false)
+		void polarToCart(const Mat& magnitude, const Mat& angle, Mat& x, Mat& y, bool angleInDegrees=false)
+		void pow(const Mat& src, double p, Mat& dst)
+		void randu(Mat& mtx, const Scalar& low, const Scalar& high)
+		void randn(Mat& mtx, const Scalar& mean, const Scalar& stddev)
+		void reduce(const Mat& mtx, Mat& vec, int dim, int reduceOp, int dtype=-1)
+		void repeat(const Mat& src, int ny, int nx, Mat& dst)
+		void scaleAdd(const Mat& src1, double scale, const Mat& src2, Mat& dst)
+		void setIdentity(Mat& dst, const Scalar& value=Scalar(1))
+		bool solve(const Mat& src1, const Mat& src2, Mat& dst, int flags=cv::DECOMP_LU)
+		void solveCubic(const Mat& coeffs, Mat& roots)
+		void solvePoly(const Mat& coeffs, Mat& roots, int maxIters=20)
+		void sort(const Mat& src, Mat& dst, int flags)
+		void sortIdx(const Mat& src, Mat& dst, int flags)
+		void sqrt(const Mat& src, Mat& dst)
+		void subtract(const Mat& src1, const Mat& src2, Mat& dst)
+		void subtract(const Mat& src1, const Mat& src2, Mat& dst, const Mat& mask)
+		void subtract(const Mat& src1, const Scalar& sc, Mat& dst, const Mat& mask=cv::Mat())
+		void subtract(const Scalar& sc, const Mat& src2, Mat& dst, const Mat& mask=cv::Mat())
+		Scalar sum(const Mat& mtx)
+		Scalar trace(const Mat& mtx) 
+		void transform(const Mat& src, Mat& dst, const Mat& mtx)
+		void transpose(const Mat& src, Mat& dst)
+		void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+		bool clipLine(Size imgSize, Point& pt1, Point& pt2)
+		bool clipLine(Rect imgRect, Point& pt1, Point& pt2)
+		void ellipse(Mat& img, Point center, Size axes, double angle, double startAngle, double endAngle, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+		void ellipse(Mat& img, const RotatedRect& box, const Scalar& color, int thickness=1, int lineType=8)	
+		void line(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+		void rectangle(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+		void putText(Mat& img, const std::string& text, Point org, int fontFace, double fontScale, Scalar color, int thickness=1, int lineType=8, bool bottomLeftOrigin=false)
+		void equalizeHist(const Mat& src, Mat& dst)
+		void ellipse2Poly(Point center, Size axes, int angle, int startAngle, int endAngle, int delta, std::vector<cv::Point>& pts)
+		
+		bool checkRange(const Mat& src, bool quiet=true, std::vector<cv::Point> pos = std::vector<cv::Point>(), double minVal=-DBL_MAX, double maxVal=DBL_MAX)
+			//bool checkRange(const Mat& src, bool quiet=true, Point* pos=0, double minVal=-DBL_MAX, double maxVal=DBL_MAX)
+			@call bool fnRetVal = cv::checkRange(*src, quiet, pos.size() ? &pos[0] : NULL, minVal, maxVal);
+	
+		void merge(std::vector<cv::Mat> mv, Mat& dst)
+			//void merge(const Mat* mv, size_t count, Mat& dst)
+			THROW_IF_NOT(mv.size() > 0, "Empty array");
+		
+		void split(const Mat& mtx, std::vector<cv::Mat>& mv)
+		void fillConvexPoly(Mat& img, const std::vector<cv::Point> &pts, const Scalar& color, int lineType=8, int shift=0)
+			//calling void fillConvexPoly(Mat& img, const Point* pts, int npts, const Scalar& color, int lineType=8, int shift=0)
+			@call cv::fillConvexPoly(*img, &pts[0], pts.size(), color, lineType, shift);
+
+		Mat resizeImage(const Mat& src, Size dsize, double fx=0, double fy=0, int interpolation=INTER_LINEAR )
+			@call 
+				cv::Mat tmp;
+				cv::resize(*src, tmp, dsize, fx, fy, interpolation);
+				cv::Mat* fnRetVal = new Mat(tmp);
+			
+
+		#HighGUI
+		Mat imdecode(const Mat& buf, int flags)
+		Mat imread(const std::string& filename, int flags=1)
+		bool imwrite(const std::string& filename, const Mat& img, const std::vector<int>& params=std::vector<int>())
+		int waitKey(int delay = 0)
+		
+		#Manual functions
+		@manual void discardMats()
+		@manual void fillPoly(Mat& img, const Point** pts, const int* npts, int ncontours, const Scalar& color, int lineType=8, int shift=0, Point offset=Point())
+		@manual Size getTextSize(const std::string& text, int fontFace, double fontScale, int thickness, int* baseLine)
+		@manual void polylines(Mat& img, const Point** pts, const int* npts, int ncontours, bool isClosed, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+		@manual double kmeans(const Mat& samples, int clusterCount, Mat& labels, TermCriteria termcrit, int attempts, int flags, Mat* centers)
+		@manual void calcHist(const Mat* arrays, int narrays, const int* channels, const Mat& mask, SparseMat& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false)
+		@manual void calcBackProject(const Mat* arrays, int narrays, const int* channels, const SparseMat& hist, Mat& backProject, const float** ranges, double scale=1, bool uniform=true)
+		@manual std::vector<cv::Rect> detectObject(const std::string& cascadeName, int imageWidth, int imageHeight)

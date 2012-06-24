@@ -1,0 +1,40 @@
+@namespace cv	
+
+	@type Point
+		int x
+		int y
+		
+	@type Point2f
+		float x
+		float y
+		
+	@type Size
+		int width
+		int height
+	
+	@type Size2f
+		float width
+		float height
+		
+	@type Rect
+		int x
+		int y
+		int width
+		int height
+	
+	@type Range
+		int start
+		int end
+
+	@type RotatedRect
+		Point2f center
+		Size2f size
+		float angle
+		
+	@type Scalar 
+	@type std::string
+	#@type size_t castfrom int
+	@type std::vector<cv::Point>
+	@type std::vector<int>
+	@type std::vector<cv::Mat*>
+	@type std::vector<cv::Mat>

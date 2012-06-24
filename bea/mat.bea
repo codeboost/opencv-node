@@ -1,0 +1,145 @@
+@namespace cv	
+	@class Mat "Mat"
+		@postAllocator
+			int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+			args.This()->SetIndexedPropertiesToExternalArrayData(_this->datastart, v8::kExternalUnsignedByteArray, bytes);
+			v8::V8::AdjustAmountOfExternalAllocatedMemory(bytes);
+			
+		@destructor
+			int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+			v8::V8::AdjustAmountOfExternalAllocatedMemory(-bytes);
+			delete _this;
+
+		Mat()
+		
+		Mat(int rows, int cols, int type = CV_8UC3)
+			THROW_IF_NOT(rows > 0 && cols > 0, "Invalid values for rows/cols parameters");
+		
+		Mat(Size size, int type)
+			THROW_IF_NOT(size.height > 0 && size.width > 0, "Invalid values for size parameter");
+		
+		Mat(int rows, int cols, int type, const Scalar& s)
+			THROW_IF_NOT(rows > 0 && cols > 0, "Invalid values for rows/cols parameters");
+			
+		Mat(Size size, int type, const Scalar& s)
+			THROW_IF_NOT(size.height > 0 && size.width > 0, "Invalid values for size parameter");
+		
+		Mat(const Mat& m)
+		Mat(const Mat& m, const Range& rowRange, const Range& colRange)
+		
+		Mat(const Mat& m, const Rect& r)
+			THROW_IF_NOT(r.width > 0 && r.height > 0, "Invalid RECT argument");
+			
+		Mat row(int i)
+			THROW_IF_NOT(i > 0, "Invalid row value");
+			
+		Mat col(int j)
+			THROW_IF_NOT(j > 0, "Invalid col value");
+			
+		Mat rowRange(int startrow, int endrow)
+			THROW_IF_NOT(startrow >= 0 && endrow >= startrow && endrow <= _this->rows, "Invalid values for range parameters");
+			
+		Mat rowRange(const Range& r)
+			THROW_IF_NOT(_this->dims >= 2, "Matrix must have at least 2 dims");
+			THROW_IF_NOT( 0 <= r.start && r.start <= r.end && r.end <= _this->rows, "Invalid range");
+
+			
+		Mat colRange(int startcol, int endcol)
+			THROW_IF_NOT(startcol >= 0 && endcol >= startcol && endcol <= _this->cols, "Invalid values for range parameters");
+			
+		Mat colRange(const Range& r)
+			THROW_IF_NOT(_this->dims >= 2, "Matrix must have at least 2 dims");
+			THROW_IF_NOT(0 <= r.start && r.start <= r.end && r.end <= _this->cols, "Invalid range");
+		
+		Mat diag(int d)
+		Mat clone()
+		void copyTo(Mat& m ) 
+		void copyTo(Mat& m, const Mat& mask)
+		void convertTo(Mat& m, int rtype, double alpha=1, double beta=0) 
+		void assignTo(Mat& m, int type=-1)
+		void setTo(const Scalar& s, const Mat& mask=Mat())
+		Mat reshape(int cn, int rows=0)
+			THROW_IF_NOT(cn >= 0, "Channels must be 0 or a positive number");
+			THROW_IF_NOT(rows >= 0, "Rows must be 0 or a positive number");
+
+		void inv(int method=cv::DECOMP_LU)
+		void mul(const Mat& m, double scale=1)
+			REQUIRE_SAME_SIZE_TYPE(_this, m);
+			
+		void t()
+		Mat cross(const Mat& m)
+			THROW_IF_NOT(_this->dims <= 2 && m->dims <= 2 && _this->size() == m->size() && _this->type() == m->type() && ((_this->rows == 3 && _this->cols == 1) || (_this->cols*_this->channels() == 3 && _this->rows == 1)), "Invalid matrix size/type");
+			THROW_IF_NOT(_this->depth() == CV_32F || _this->depth() == CV_64F, "Matrices must have 32 or 64 bit float format");	
+		
+		double dot(const Mat& m)
+			REQUIRE_SAME_SIZE(m, _this);
+			
+		void create(int rows, int cols, int type) 
+			THROW_IF_NOT(rows > 0 && cols > 0, "Invalid values for rows/cols parameters");
+			
+		void create(Size size, int type)
+			THROW_IF_NOT(size.height > 0 && size.width > 0, "Invalid values for size parameter");
+		
+		Mat eye(int rows, int cols, int type)
+			THROW_IF_NOT(rows > 0 && cols > 0, "Invalid dimensions");
+			
+		Mat eye(Size size, int type)
+		Mat ones(int rows, int cols, int type) 
+		Mat ones(Size size, int type)
+		Mat zeros(int rows, int cols, int type)
+		Mat zeros(Size size, int type) 
+		void resize(size_t sz)
+			THROW_IF_NOT(sz > 0, "Invalid size value");
+			
+		void locateROI(Size& wholeSize, Point& ofs)
+		Mat& adjustROI(int dtop, int dbottom, int dleft, int dright)
+		size_t step1()
+		#size_t total() 
+		#bool isContinuous() 
+		#size_t elemSize()
+		#size_t elemSize1()
+		#int type()
+		#int depth() 
+		#int channels()
+		
+		#Size size()
+		#bool empty()		
+		@accessor width int
+			@get _this->size().width
+			@set
+			
+		@accessor height int
+			@get _this->size().height
+			@set
+			
+		@accessor size Size
+			@get _this->size()
+			@set
+			
+		@accessor type int
+			@get _this->type()
+			@set
+		@accessor channels int
+			@get _this->channels()
+			@set
+			
+		@accessor isContinuous bool
+			@get _this->isContinuous()
+			@set
+			
+		@accessor elemSize int
+			@get _this->elemSize()
+			@set
+		
+		@accessor empty bool
+			@get _this->empty()
+			@set
+		
+		@accessor depth int
+			@get _this->depth()
+			@set
+			
+		@accessor total int
+			@get _this->total()
+			@set 
+			

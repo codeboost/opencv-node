@@ -1,0 +1,9 @@
+argv = ['/usr/local/bin/node-waf', 'configure']
+blddir = '/Users/florin/Sites/opencv-js/build'
+commands = {'dist': 0, 'configure': True, 'distcheck': 0, 'install': 0, 'build': 0, 'clean': 0, 'distclean': 0, 'check': 0, 'uninstall': 0}
+cwd = '/Users/florin/Sites/opencv-js'
+environ = {'TERM_SESSION_ID': 'D46280D4-1062-4C8A-9A11-C42CC05C07B5', 'SSH_AUTH_SOCK': '/tmp/launch-1ygzou/Listeners', 'VERSIONER_PYTHON_PREFER_32_BIT': 'no', 'TERM_PROGRAM_VERSION': '303.2', 'SHELL': '/bin/bash', 'LOGNAME': 'florin', 'USER': 'florin', 'HOME': '/Users/florin', 'PATH': '/Users/florin/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/local/go/bin', 'DISPLAY': '/tmp/launch-yc79oH/org.x:0', 'TMPDIR': '/var/folders/2b/3ntd4jl124b4sdpy4hvnqqn00000gn/T/', 'TERM_PROGRAM': 'Apple_Terminal', 'LANG': 'en_US.UTF-8', 'TERM': 'xterm-color', 'Apple_PubSub_Socket_Render': '/tmp/launch-Jb17EK/Render', 'VERSIONER_PYTHON_VERSION': '2.7', 'SHLVL': '1', 'OLDPWD': '/Users/florin/Sites/opencv-js/bea', '__CF_USER_TEXT_ENCODING': '0x1F5:0:0', 'Apple_Ubiquity_Message': '/tmp/launch-TOTkZ4/Apple_Ubiquity_Message', 'PWD': '/Users/florin/Sites/opencv-js', '_': '/usr/local/bin/node-waf', 'COMMAND_MODE': 'unix2003'}
+files = []
+hash = 0
+options = {'compile_targets': None, 'force': False, 'verbose': 0, 'nocache': False, 'progress_bar': 0, 'destdir': '', 'keep': False, 'zones': '', 'blddir': '', 'prefix': '/usr/local/', 'jobs': 8, 'srcdir': '', 'check_cxx_compiler': 'g++'}
+srcdir = '/Users/florin/Sites/opencv-js'

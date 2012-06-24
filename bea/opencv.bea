@@ -1,0 +1,26 @@
+@project opencvjs
+	
+@targetNamespace opencvjs
+
+#C++ code added to the header file
+@header 
+	\#include <v8.h>
+	
+#C++ code added to the cpp file	
+@cpp
+	\#include "cvcheck.h"
+	\#include <cv.hpp>
+	\#include <highgui.h>
+	\#include "bea.h"
+	\#include "opencvjs.h"
+	\#include "customTypes.h"
+	using namespace cv;
+	
+
+@include "constants.bea"
+@include "types.bea"
+@include "mat.bea"
+@include "cv.bea"
+
+	
+
