@@ -6,4 +6,4 @@ environ = {'TERM_SESSION_ID': 'D46280D4-1062-4C8A-9A11-C42CC05C07B5', 'SSH_AUTH_
 files = []
 hash = 0
 options = {'compile_targets': None, 'force': False, 'verbose': 0, 'nocache': False, 'progress_bar': 0, 'destdir': '', 'keep': False, 'zones': '', 'blddir': '', 'prefix': '/usr/local/', 'jobs': 8, 'srcdir': '', 'check_cxx_compiler': 'g++'}
-srcdir = '/Users/florin/Sites/opencv-js'
+srcdir = '/Users/florin/Sites/opencv-js/src'
