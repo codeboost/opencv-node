@@ -189,7 +189,6 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> imread(const v8::Arguments& args);
 			static v8::Handle<v8::Value> imwrite(const v8::Arguments& args);
 			static v8::Handle<v8::Value> waitKey(const v8::Arguments& args);
-			static v8::Handle<v8::Value> discardMats(const v8::Arguments& args);
 			static v8::Handle<v8::Value> fillPoly(const v8::Arguments& args);
 			static v8::Handle<v8::Value> getTextSize(const v8::Arguments& args);
 			static v8::Handle<v8::Value> polylines(const v8::Arguments& args);

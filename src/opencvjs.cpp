@@ -2564,7 +2564,6 @@ namespace opencvjs {
 		obj->exposeMethod("imread", imread);
 		obj->exposeMethod("imwrite", imwrite);
 		obj->exposeMethod("waitKey", waitKey);
-		obj->exposeMethod("discardMats", discardMats);
 		obj->exposeMethod("fillPoly", fillPoly);
 		obj->exposeMethod("getTextSize", getTextSize);
 		obj->exposeMethod("polylines", polylines);

@@ -262,7 +262,7 @@
 		int waitKey(int delay = 0)
 		
 		#Manual functions
-		@manual void discardMats()
+		#@manual void discardMats()
 		@manual void fillPoly(Mat& img, const Point** pts, const int* npts, int ncontours, const Scalar& color, int lineType=8, int shift=0, Point offset=Point())
 		@manual Size getTextSize(const std::string& text, int fontFace, double fontScale, int thickness, int* baseLine)
 		@manual void polylines(Mat& img, const Point** pts, const int* npts, int ncontours, bool isClosed, const Scalar& color, int thickness=1, int lineType=8, int shift=0)

@@ -63,17 +63,15 @@ init = (width, height, format) ->
     mat1 = new Mat(155, 156)
     ok mat1.width is 156 and mat1.height is 155, "Mat1 width/height"
     ok mat1.type is cv.CV_8UC3, "Type of mat created with int parameters"
-    cv.discardMats mat1
     mat1 = new Mat(srcMat)
     ok mat1.width is srcMat.width and mat1.height is srcMat.height and mat1.type is srcMat.type and mat1.depth is srcMat.depth and mat1.channels is srcMat.channels, "Width/height/channels/depth of matrix created with Mat parameter"
-    cv.discardMats mat1
     mat1 = new Mat(
       width: 123
       height: 124
     , cv.CV_8UC4)
     ok mat1.width is 123 and mat1.height is 124, "Width/height of Mat created with Size param"
     ok mat1.type is cv.CV_8UC4, "Type of mat created with size param"
-    cv.discardMats mat1
+
     mat1 = new Mat(srcMat,
       x: 20
       y: 20
@@ -112,7 +110,6 @@ init = (width, height, format) ->
     colsMat = srcMat.colRange(0, width)
     ok colsMat.width is width, "Width must be equal"
     ok colsMat.height is height, "Height must be equal"
-    cv.discardMats colsMat
     mustThrow "Invalid row range", ->
       srcMat.rowRange 0, height + 1
 
@@ -135,7 +132,6 @@ init = (width, height, format) ->
     destMat = new Mat(100, 100, cv.CV_8UC3)
     srcMat.copyTo destMat
     ok SAME_EVERYTHING(srcMat, destMat), "Copy to different size matrix"
-    cv.discardMats destMat
     destMat = new Mat(height, width, cv.CV_8UC4)
     srcMat.copyTo destMat
     ok SAME_EVERYTHING(srcMat, destMat), "Copy to different depth matrix"
@@ -144,10 +140,8 @@ init = (width, height, format) ->
         width: 1090
         height: 33
 
-    cv.discardMats destMat
     destMat = new Mat(height, width, cv.CV_8UC3)
     ok srcMat.copyTo(destMat) is srcMat, "Copy to good matrix"
-    cv.discardMats destMat
 
   test "setTo", ->
     mustThrow "setTo(undefined)", ->
@@ -199,8 +193,6 @@ init = (width, height, format) ->
     mustThrow "mul(invalid size matrix)", ->
       srcMat.mul mulMat
 
-    cv.discardMats mulMat
-
     srcMat = new Mat 100, 100
 
     mulMat = new Mat(srcMat.height, srcMat.width, srcMat.type)
@@ -233,7 +225,6 @@ init = (width, height, format) ->
 
     res = src.reshape(0)
     ok SAME_EVERYTHING(res, src), "reshaped must be a cloned src"
-    cv.discardMats res
     res = src.reshape(1, 0)
     ok res.width is src.width * 3, "Result width must be 3 * src.width?"
 
