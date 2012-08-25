@@ -7,6 +7,7 @@
 using namespace cv;
 
 namespace opencvjs {
+	/*
 	v8::Handle<v8::Value> JOpenCV::discardMats(const v8::Arguments& args) {
 		METHOD_BEGIN(1);
 		v8::HandleScope scope; 
@@ -36,7 +37,7 @@ namespace opencvjs {
 		return args.This();
 		METHOD_END();
 	}
-		
+	*/	
 	v8::Handle<v8::Value> JOpenCV::fillPoly(const v8::Arguments& args) {
 		METHOD_BEGIN(5);
 		// void fillPoly(Mat& img, const Point** pts, const int* npts, int ncontours, const Scalar& color, int lineType=8, int shift=0, Point offset=Point())

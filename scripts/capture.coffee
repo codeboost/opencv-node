@@ -23,8 +23,8 @@ testCapture = ->
 		cv.imshow "camera", frame
 
 		cv.cvtColor frame, edges, cv.CV_BGR2GRAY
-		cv.GaussianBlur edges, edges, {width: 7, height: 7}, 1.5, 1.5
-		cv.Canny edges, edges, 0, 30, 3
+		#cv.GaussianBlur edges, edges, {width: 7, height: 7}, 1.5, 1.5
+		#cv.Canny edges, edges, 0, 30, 3
 
 		cv.imshow "output", edges
 

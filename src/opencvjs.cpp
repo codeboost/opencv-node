@@ -470,7 +470,8 @@ namespace opencvjs {
 		METHOD_BEGIN(1);
 		//void setTo(const Scalar& s, const Mat& mask=Mat())
 		cv::Scalar s = bea::Convert<cv::Scalar>::FromJS(args[0], 0);
-		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 1, &cv::Mat());
+		Mat _t = cv::Mat();
+		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 1, &_t);
 		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(args.This(), 0);
 		_this->setTo(s, *mask);
 		return args.This();
@@ -1339,7 +1340,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			REQUIRE_SAME_SIZE_TYPE(src1, dst);
 			THROW_IF_NOT(bea::Convert<cv::Mat*>::Is(args[3]) && mask->channels() == 1, "Mask must be a single-channel 8 bit matrix");
 			cv::add(*src1, sc, *dst, *mask);
@@ -1356,7 +1358,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Mat* src2 = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			REQUIRE_SAME_SIZE_TYPE(src1, src2);
 			REQUIRE_SAME_SIZE_TYPE(src1, dst);
 			cv::bitwise_and(*src1, *src2, *dst, *mask);
@@ -1367,7 +1370,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			REQUIRE_SAME_SIZE_TYPE(src1, dst);
 			cv::bitwise_and(*src1, sc, *dst, *mask);
 			return args.This();
@@ -1393,7 +1397,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Mat* src2 = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			REQUIRE_SAME_SIZE_TYPE(src1, src2);
 			cv::bitwise_or(*src1, *src2, *dst, *mask);
 			return args.This();
@@ -1403,7 +1408,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			cv::bitwise_or(*src1, sc, *dst, *mask);
 			return args.This();
 		}
@@ -1418,7 +1424,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Mat* src2 = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			REQUIRE_SAME_SIZE_TYPE(src1, src2);
 			cv::bitwise_xor(*src1, *src2, *dst, *mask);
 			return args.This();
@@ -1428,7 +1435,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			cv::bitwise_xor(*src1, sc, *dst, *mask);
 			return args.This();
 		}
@@ -1839,7 +1847,8 @@ namespace opencvjs {
 		cv::Mat* mtx = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 		cv::Scalar mean = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 		cv::Scalar stddev = bea::Convert<cv::Scalar>::FromJS(args[2], 2);
-		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+		Mat _t = cv::Mat();
+		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 		//TODO: check mask type/size
 		cv::meanStdDev(*mtx, mean, stddev, *mask);
 		return args.This();
@@ -1940,7 +1949,8 @@ namespace opencvjs {
 		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
 		bool aTa = bea::Convert<bool>::FromJS(args[2], 2);
-		cv::Mat* delta = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+		Mat _t = cv::Mat();
+		cv::Mat* delta = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 		double scale = bea::Optional<double>::FromJS(args, 4, 1);
 		int rtype = bea::Optional<int>::FromJS(args, 5, -1);
 		cv::mulTransposed(*src, *dst, aTa, *delta, scale, rtype);
@@ -1957,7 +1967,8 @@ namespace opencvjs {
 		double beta = bea::Optional<double>::FromJS(args, 3, 0);
 		int normType = bea::Optional<int>::FromJS(args, 4, cv::NORM_L2);
 		int rtype = bea::Optional<int>::FromJS(args, 5, -1);
-		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 6, &cv::Mat());
+		Mat _t = cv::Mat();
+		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 6, &_t);
 		cv::normalize(*src, *dst, alpha, beta, normType, rtype, *mask);
 		return args.This();
 		METHOD_END();
@@ -2168,7 +2179,8 @@ namespace opencvjs {
 			cv::Mat* src1 = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			cv::subtract(*src1, sc, *dst, *mask);
 			return args.This();
 		}
@@ -2177,7 +2189,8 @@ namespace opencvjs {
 			cv::Scalar sc = bea::Convert<cv::Scalar>::FromJS(args[0], 0);
 			cv::Mat* src2 = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
 			cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &cv::Mat());
+			Mat _t = cv::Mat();
+			cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 3, &_t);
 			cv::subtract(sc, *src2, *dst, *mask);
 			return args.This();
 		}

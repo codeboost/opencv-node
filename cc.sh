@@ -1,0 +1,1 @@
+coffee ../bea2/bea.coffee /Users/florin/Sites/opencv-js/bea/opencv.bea -o /Users/florin/Sites/opencv-js/src -f
