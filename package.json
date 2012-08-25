@@ -1,12 +1,12 @@
 {
   "name": "opencv-node",
   "description": "Opencv for node",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "homepage": "https://github.com/codeboost/opencv-node",
   "author": "Florin Braghis <florin@libertv.ro>",
   "keywords" : ["opencv"],
   "scripts": {
-    "install": "node-waf configure build",
+    "install": "node-gyp configure build",
     "test": "coffee script/tests"
   },
   "main": "index.js",
