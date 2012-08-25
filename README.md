@@ -34,10 +34,13 @@ Building on MacOS X
 	$ node-waf configure build
 	$ coffee scripts/tests
 
-If you want to make changes to the API:
 
-	$ npm install -g bea
-	$ cd bea 
-	$ bea opencv.bea -f -o ../src
-	$ cd ..
-	$ node-waf configure build
+Building on Windows:
+	1. OpenCV must be installed. Download latest version from http://sourceforge.net/projects/opencvlibrary/files/latest/download
+	2. Extract to a folder, eg C:\OpenCV
+	3. Open a command prompt and set the environment variable OPENCV_ROOT:
+
+			set OPENCV_ROOT=C:/OpenCV
+	4. Install opencv-node with npm:
+
+			npm install -g opencv-node
