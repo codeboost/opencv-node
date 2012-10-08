@@ -11,7 +11,7 @@
   },
   "main": "index.js",
   "engines": {
-    "node": "*"
+    "node": ">=0.8.11"
   },
   "dependencies": {
     "coffee-script": ">=1.3.3",

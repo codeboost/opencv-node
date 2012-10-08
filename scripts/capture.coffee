@@ -10,6 +10,7 @@ testCapture = ->
 		return
 
 	edges = new Mat
+
 	cv.namedWindow "camera", 1
 	cv.namedWindow "output", 1
 
