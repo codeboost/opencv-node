@@ -6,6 +6,34 @@
 #include "customTypes.h"
 using namespace cv;
 namespace bea {
+	template<> struct Convert<cv::TermCriteria> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::TermCriteria FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: type, maxCount, epsilon. This will be cast to 'cv::TermCriteria'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::TermCriteria ret;
+			ret.type = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("type")), nArg);
+			ret.maxCount = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("maxCount")), nArg);
+			ret.epsilon = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("epsilon")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::TermCriteria const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("type"), bea::Convert<int>::ToJS(v.type));
+			obj->Set(v8::String::NewSymbol("maxCount"), bea::Convert<int>::ToJS(v.maxCount));
+			obj->Set(v8::String::NewSymbol("epsilon"), bea::Convert<double>::ToJS(v.epsilon));
+			return scope.Close(obj);
+		}
+		
+	};
+	
 	template<> struct Convert<cv::Point> {
 		static bool Is(v8::Handle<v8::Value> v) {
 			return !v.IsEmpty() && v->IsObject();
@@ -684,6 +712,17 @@ namespace opencvjs {
 		METHOD_END();
 	}
 	
+	v8::Handle<v8::Value> JMat::indexable(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void indexable()
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(args.This(), 0);
+		int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+		args.This()->SetIndexedPropertiesToExternalArrayData(_this->datastart, v8::kExternalUnsignedByteArray, bytes);
+			
+		return args.This();
+		METHOD_END();
+	}
+	
 	//Get Accessor width (int)
 	v8::Handle<v8::Value> JMat::accGet_width( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
 		v8::HandleScope scope; 
@@ -844,6 +883,38 @@ namespace opencvjs {
 		//TODO: Set value here
 	}
 	
+	//Get Accessor rows (int)
+	v8::Handle<v8::Value> JMat::accGet_rows( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->rows);
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor rows (int)
+	void JMat::accSet_rows(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor cols (int)
+	v8::Handle<v8::Value> JMat::accGet_cols( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->cols);
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor cols (int)
+	void JMat::accSet_cols(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
 	void JMat::_InitJSObject(v8::Handle<v8::Object> target) {
 		bea::ExposedClass<cv::Mat>* obj = EXPOSE_CLASS(cv::Mat, "Mat");
 		//Destructor
@@ -875,6 +946,7 @@ namespace opencvjs {
 		obj->exposeMethod("locateROI", locateROI);
 		obj->exposeMethod("adjustROI", adjustROI);
 		obj->exposeMethod("step1", step1);
+		obj->exposeMethod("indexable", indexable);
 		//Accessors
 		obj->exposeProperty("width", accGet_width, accSet_width);
 		obj->exposeProperty("height", accGet_height, accSet_height);
@@ -886,6 +958,8 @@ namespace opencvjs {
 		obj->exposeProperty("empty", accGet_empty, accSet_empty);
 		obj->exposeProperty("depth", accGet_depth, accSet_depth);
 		obj->exposeProperty("total", accGet_total, accSet_total);
+		obj->exposeProperty("rows", accGet_rows, accSet_rows);
+		obj->exposeProperty("cols", accGet_cols, accSet_cols);
 		//Expose object to the Javascript
 		obj->exposeTo(target);
 	}
@@ -2405,13 +2479,13 @@ namespace opencvjs {
 	}
 	
 	v8::Handle<v8::Value> JOpenCV::split(const v8::Arguments& args) {
-		METHOD_BEGIN(2);
-		//void split(const Mat& mtx, std::vector<cv::Mat>& mv)
+		METHOD_BEGIN(1);
+		//std::vector<cv::Mat> split(const Mat& mtx)
 		cv::Mat* mtx = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
-		std::vector<cv::Mat> mv = bea::Convert<std::vector<cv::Mat> >::FromJS(args[1], 1);
-		cv::split(*mtx, mv);
-		//args[1] = bea::Convert<std::vector<cv::Mat> >::ToJS(mv);
-		return args.This();
+		std::vector<cv::Mat> fnRetVal;
+		cv::split(*mtx, fnRetVal);
+			
+		return bea::Convert<std::vector<cv::Mat> >::ToJS(fnRetVal);
 		METHOD_END();
 	}
 	
@@ -2461,7 +2535,10 @@ namespace opencvjs {
 		//Mat imread(const std::string& filename, int flags=1)
 		std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
 		int flags = bea::Optional<int>::FromJS(args, 1, 1);
-		cv::Mat* fnRetVal = new cv::Mat(cv::imread(filename, flags));
+		cv::Mat tmp = cv::imread(filename, flags);
+		THROW_IF_NOT(tmp.total() > 0, "Couldn't load file");
+		cv::Mat* fnRetVal = new Mat(tmp);
+			
 		return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		METHOD_END();
 	}
@@ -2483,6 +2560,124 @@ namespace opencvjs {
 		int delay = bea::Optional<int>::FromJS(args, 0,  0);
 		int fnRetVal = cv::waitKey(delay);
 		return bea::Convert<int>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::HoughCircles(const v8::Arguments& args) {
+		METHOD_BEGIN(4);
+		//std::vector<cv::Vec3f> HoughCircles(Mat& image, int method, double dp, double minDist, double param1=100, double param2=100, int minRadius=0, int maxRadius=0)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		int method = bea::Convert<int>::FromJS(args[1], 1);
+		double dp = bea::Convert<double>::FromJS(args[2], 2);
+		double minDist = bea::Convert<double>::FromJS(args[3], 3);
+		double param1 = bea::Optional<double>::FromJS(args, 4, 100);
+		double param2 = bea::Optional<double>::FromJS(args, 5, 100);
+		int minRadius = bea::Optional<int>::FromJS(args, 6, 0);
+		int maxRadius = bea::Optional<int>::FromJS(args, 7, 0);
+		std::vector<cv::Vec3f> fnRetVal;
+		cv::HoughCircles(*image, fnRetVal, method, dp, minDist, param1, param2, minRadius, maxRadius);
+			
+		return bea::Convert<std::vector<cv::Vec3f> >::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::HoughLines(const v8::Arguments& args) {
+		METHOD_BEGIN(4);
+		//std::vector<cv::Vec2f> HoughLines(Mat& image, double rho, double theta, int threshold, double srn=0, double stn=0)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		double rho = bea::Convert<double>::FromJS(args[1], 1);
+		double theta = bea::Convert<double>::FromJS(args[2], 2);
+		int threshold = bea::Convert<int>::FromJS(args[3], 3);
+		double srn = bea::Optional<double>::FromJS(args, 4, 0);
+		double stn = bea::Optional<double>::FromJS(args, 5, 0);
+		std::vector<cv::Vec2f> fnRetVal;
+		cv::HoughLines(*image, fnRetVal, rho, theta, threshold, srn, stn);
+			
+		return bea::Convert<std::vector<cv::Vec2f> >::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::preCornerDetect(const v8::Arguments& args) {
+		METHOD_BEGIN(3);
+		//void preCornerDetect(const Mat& src, Mat& dst, int apertureSize, int borderType=BORDER_DEFAULT)
+		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		int apertureSize = bea::Convert<int>::FromJS(args[2], 2);
+		int borderType = bea::Optional<int>::FromJS(args, 3, BORDER_DEFAULT);
+		cv::preCornerDetect(*src, *dst, apertureSize, borderType);
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::goodFeaturesToTrack(const v8::Arguments& args) {
+		METHOD_BEGIN(5);
+		//void goodFeaturesToTrack(const Mat& image, std::vector<Point2f>& corners, int maxCorners, double qualityLevel, double minDistance, const Mat& mask=Mat(), int blockSize=3, bool useHarrisDetector=false, double k=0.04)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		std::vector<Point2f> corners = bea::Convert<std::vector<Point2f> >::FromJS(args[1], 1);
+		int maxCorners = bea::Convert<int>::FromJS(args[2], 2);
+		double qualityLevel = bea::Convert<double>::FromJS(args[3], 3);
+		double minDistance = bea::Convert<double>::FromJS(args[4], 4);
+		Mat _t = cv::Mat();
+		cv::Mat* mask = bea::Optional<cv::Mat*>::FromJS(args, 5, &_t);
+		int blockSize = bea::Optional<int>::FromJS(args, 6, 3);
+		bool useHarrisDetector = bea::Optional<bool>::FromJS(args, 7, false);
+		double k = bea::Optional<double>::FromJS(args, 8, 0.04);
+		cv::goodFeaturesToTrack(*image, corners, maxCorners, qualityLevel, minDistance, *mask, blockSize, useHarrisDetector, k);
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::cornerSubPix(const v8::Arguments& args) {
+		METHOD_BEGIN(4);
+		//std::vector<cv::Point2f> cornerSubPix(const Mat& image, Size winSize, Size zeroZone, TermCriteria criteria)
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Size winSize = bea::Convert<cv::Size>::FromJS(args[1], 1);
+		cv::Size zeroZone = bea::Convert<cv::Size>::FromJS(args[2], 2);
+		cv::TermCriteria criteria = bea::Convert<cv::TermCriteria>::FromJS(args[3], 3);
+		std::vector<cv::Point2f> fnRetVal;
+		cv::cornerSubPix(*image, fnRetVal, winSize, zeroZone, criteria);
+			
+		return bea::Convert<std::vector<cv::Point2f> >::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::cornerMinEigenVal(const v8::Arguments& args) {
+		METHOD_BEGIN(3);
+		//void cornerMinEigenVal(const Mat& src, Mat& dst, int blockSize, int apertureSize=3, int borderType=BORDER_DEFAULT)
+		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		int blockSize = bea::Convert<int>::FromJS(args[2], 2);
+		int apertureSize = bea::Optional<int>::FromJS(args, 3, 3);
+		int borderType = bea::Optional<int>::FromJS(args, 4, BORDER_DEFAULT);
+		cv::cornerMinEigenVal(*src, *dst, blockSize, apertureSize, borderType);
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::cornerHarris(const v8::Arguments& args) {
+		METHOD_BEGIN(5);
+		//void cornerHarris(const Mat& src, Mat& dst, int blockSize, int apertureSize, double k, int borderType=BORDER_DEFAULT)
+		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		int blockSize = bea::Convert<int>::FromJS(args[2], 2);
+		int apertureSize = bea::Convert<int>::FromJS(args[3], 3);
+		double k = bea::Convert<double>::FromJS(args[4], 4);
+		int borderType = bea::Optional<int>::FromJS(args, 5, BORDER_DEFAULT);
+		cv::cornerHarris(*src, *dst, blockSize, apertureSize, k, borderType);
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::cornerEigenValsAndVecs(const v8::Arguments& args) {
+		METHOD_BEGIN(4);
+		//void cornerEigenValsAndVecs(const Mat& src, Mat& dst, int blockSize, int apertureSize, int borderType=BORDER_DEFAULT)
+		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		int blockSize = bea::Convert<int>::FromJS(args[2], 2);
+		int apertureSize = bea::Convert<int>::FromJS(args[3], 3);
+		int borderType = bea::Optional<int>::FromJS(args, 4, BORDER_DEFAULT);
+		cv::cornerEigenValsAndVecs(*src, *dst, blockSize, apertureSize, borderType);
+		return args.This();
 		METHOD_END();
 	}
 	
@@ -2578,6 +2773,16 @@ namespace opencvjs {
 		obj->exposeMethod("imread", imread);
 		obj->exposeMethod("imwrite", imwrite);
 		obj->exposeMethod("waitKey", waitKey);
+		obj->exposeMethod("HoughCircles", HoughCircles);
+		obj->exposeMethod("HoughLines", HoughLines);
+		obj->exposeMethod("preCornerDetect", preCornerDetect);
+		obj->exposeMethod("goodFeaturesToTrack", goodFeaturesToTrack);
+		obj->exposeMethod("cornerSubPix", cornerSubPix);
+		obj->exposeMethod("cornerMinEigenVal", cornerMinEigenVal);
+		obj->exposeMethod("cornerHarris", cornerHarris);
+		obj->exposeMethod("cornerEigenValsAndVecs", cornerEigenValsAndVecs);
+		obj->exposeMethod("cvSmooth", cvSmooth);
+		obj->exposeMethod("discardMats", discardMats);
 		obj->exposeMethod("fillPoly", fillPoly);
 		obj->exposeMethod("getTextSize", getTextSize);
 		obj->exposeMethod("polylines", polylines);
@@ -2794,6 +2999,102 @@ namespace opencvjs {
 		BEA_DEFINE_CONSTANT(target, CV_EVENT_FLAG_CTRLKEY);
 		BEA_DEFINE_CONSTANT(target, CV_EVENT_FLAG_SHIFTKEY);
 		BEA_DEFINE_CONSTANT(target, CV_EVENT_FLAG_ALTKEY);
+		BEA_DEFINE_CONSTANT(target, CV_INTER_NN);
+		BEA_DEFINE_CONSTANT(target, CV_INTER_LINEAR);
+		BEA_DEFINE_CONSTANT(target, CV_INTER_CUBIC);
+		BEA_DEFINE_CONSTANT(target, CV_INTER_AREA);
+		BEA_DEFINE_CONSTANT(target, CV_INTER_LANCZOS4);
+		BEA_DEFINE_CONSTANT(target, CV_WARP_FILL_OUTLIERS);
+		BEA_DEFINE_CONSTANT(target, CV_WARP_INVERSE_MAP);
+		BEA_DEFINE_CONSTANT(target, CV_SHAPE_RECT);
+		BEA_DEFINE_CONSTANT(target, CV_SHAPE_CROSS);
+		BEA_DEFINE_CONSTANT(target, CV_SHAPE_ELLIPSE);
+		BEA_DEFINE_CONSTANT(target, CV_SHAPE_CUSTOM);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_ERODE);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_DILATE);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_OPEN);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_CLOSE);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_GRADIENT);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_TOPHAT);
+		BEA_DEFINE_CONSTANT(target, CV_MOP_BLACKHAT);
+		BEA_DEFINE_CONSTANT(target, CV_TM_SQDIFF);
+		BEA_DEFINE_CONSTANT(target, CV_TM_SQDIFF_NORMED);
+		BEA_DEFINE_CONSTANT(target, CV_TM_CCORR);
+		BEA_DEFINE_CONSTANT(target, CV_TM_CCORR_NORMED);
+		BEA_DEFINE_CONSTANT(target, CV_TM_CCOEFF);
+		BEA_DEFINE_CONSTANT(target, CV_TM_CCOEFF_NORMED);
+		BEA_DEFINE_CONSTANT(target, CV_RETR_EXTERNAL);
+		BEA_DEFINE_CONSTANT(target, CV_RETR_LIST);
+		BEA_DEFINE_CONSTANT(target, CV_RETR_CCOMP);
+		BEA_DEFINE_CONSTANT(target, CV_RETR_TREE);
+		BEA_DEFINE_CONSTANT(target, CV_CHAIN_CODE);
+		BEA_DEFINE_CONSTANT(target, CV_CHAIN_APPROX_NONE);
+		BEA_DEFINE_CONSTANT(target, CV_CHAIN_APPROX_SIMPLE);
+		BEA_DEFINE_CONSTANT(target, CV_CHAIN_APPROX_TC89_L1);
+		BEA_DEFINE_CONSTANT(target, CV_CHAIN_APPROX_TC89_KCOS);
+		BEA_DEFINE_CONSTANT(target, CV_LINK_RUNS);
+		BEA_DEFINE_CONSTANT(target, CV_PTLOC_ERROR);
+		BEA_DEFINE_CONSTANT(target, CV_PTLOC_OUTSIDE_RECT);
+		BEA_DEFINE_CONSTANT(target, CV_PTLOC_INSIDE);
+		BEA_DEFINE_CONSTANT(target, CV_PTLOC_VERTEX);
+		BEA_DEFINE_CONSTANT(target, CV_PTLOC_ON_EDGE);
+		BEA_DEFINE_CONSTANT(target, CV_NEXT_AROUND_ORG);
+		BEA_DEFINE_CONSTANT(target, CV_NEXT_AROUND_DST);
+		BEA_DEFINE_CONSTANT(target, CV_PREV_AROUND_ORG);
+		BEA_DEFINE_CONSTANT(target, CV_PREV_AROUND_DST);
+		BEA_DEFINE_CONSTANT(target, CV_NEXT_AROUND_LEFT);
+		BEA_DEFINE_CONSTANT(target, CV_NEXT_AROUND_RIGHT);
+		BEA_DEFINE_CONSTANT(target, CV_PREV_AROUND_LEFT);
+		BEA_DEFINE_CONSTANT(target, CV_PREV_AROUND_RIGHT);
+		BEA_DEFINE_CONSTANT(target, CV_POLY_APPROX_DP);
+		BEA_DEFINE_CONSTANT(target, CV_CONTOURS_MATCH_I1);
+		BEA_DEFINE_CONSTANT(target, CV_CONTOURS_MATCH_I2);
+		BEA_DEFINE_CONSTANT(target, CV_CONTOURS_MATCH_I3);
+		BEA_DEFINE_CONSTANT(target, CV_CLOCKWISE);
+		BEA_DEFINE_CONSTANT(target, CV_COUNTER_CLOCKWISE);
+		BEA_DEFINE_CONSTANT(target, CV_COMP_CORREL);
+		BEA_DEFINE_CONSTANT(target, CV_COMP_CHISQR);
+		BEA_DEFINE_CONSTANT(target, CV_COMP_INTERSECT);
+		BEA_DEFINE_CONSTANT(target, CV_COMP_BHATTACHARYYA);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_MASK_3);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_MASK_5);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_MASK_PRECISE);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_USER);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_L1);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_L2);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_C);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_L12);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_FAIR);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_WELSCH);
+		BEA_DEFINE_CONSTANT(target, CV_DIST_HUBER);
+		BEA_DEFINE_CONSTANT(target, CV_ADAPTIVE_THRESH_MEAN_C);
+		BEA_DEFINE_CONSTANT(target, CV_ADAPTIVE_THRESH_GAUSSIAN_C);
+		BEA_DEFINE_CONSTANT(target, CV_FLOODFILL_FIXED_RANGE);
+		BEA_DEFINE_CONSTANT(target, CV_FLOODFILL_MASK_ONLY);
+		BEA_DEFINE_CONSTANT(target, CV_CANNY_L2_GRADIENT);
+		BEA_DEFINE_CONSTANT(target, CV_HOUGH_PROBABILISTIC);
+		BEA_DEFINE_CONSTANT(target, CV_HOUGH_STANDARD);
+		BEA_DEFINE_CONSTANT(target, CV_HOUGH_MULTI_SCALE);
+		BEA_DEFINE_CONSTANT(target, CV_HOUGH_GRADIENT);
+		BEA_DEFINE_CONSTANT(target, CV_BLUR_NO_SCALE);
+		BEA_DEFINE_CONSTANT(target, CV_BLUR);
+		BEA_DEFINE_CONSTANT(target, CV_GAUSSIAN);
+		BEA_DEFINE_CONSTANT(target, CV_MEDIAN);
+		BEA_DEFINE_CONSTANT(target, CV_BILATERAL);
+		BEA_DEFINE_CONSTANT(target, CV_GAUSSIAN_5x5);
+		BEA_DEFINE_CONSTANT(target, CV_INPAINT_NS);
+		BEA_DEFINE_CONSTANT(target, CV_INPAINT_TELEA);
+		BEA_DEFINE_CONSTANT(target, CV_SCHARR);
+		BEA_DEFINE_CONSTANT(target, CV_MAX_SOBEL_KSIZE);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SIMPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_PLAIN);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_DUPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_COMPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_TRIPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_COMPLEX_SMALL);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SCRIPT_SIMPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SCRIPT_COMPLEX);
+		BEA_DEFINE_CONSTANT(target, FONT_ITALIC);
 	}
 	
 }

@@ -1,10 +1,8 @@
 Opencvjs
 
-
 Purpose 
 =======
 Expose opencv to the node environment.
-
 
 Features
 ======
@@ -44,3 +42,16 @@ Building on Windows:
 	4. Install opencv-node with npm:
 
 			npm install -g opencv-node
+
+
+API Differences
+
+Some functions have a more js-friendly API/syntax. 
+The void functions which return their output in an argument passed by reference, return the result directly:
+
+	cv::split returns an Array and takes only 1 argument
+	cv::HoughCircles returns an Array
+	cv::HoughLines returns an Array
+	cv::cornerSubPix returns an Array
+
+	* others?

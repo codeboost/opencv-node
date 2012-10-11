@@ -5,6 +5,77 @@
 #include <vector>
 
 namespace bea{
+
+	template<> struct Convert<cv::Vec3f>{
+
+		static bool Is(v8::Handle<v8::Value> v){
+			return !v.IsEmpty() && v->IsArray();
+		}
+
+		static cv::Vec3f FromJS(v8::Handle<v8::Value> v, int nArg){
+			const char* msg = "Array of 3 values expected (Vec3f)";
+			if (!Is(v)) BEATHROW();
+
+			v8::HandleScope scope; 
+
+			std::vector<float> vec = Convert<std::vector<float> >::FromJS(v, nArg);
+
+			if (vec.size() < 3)
+				BEATHROW();
+
+			cv::Vec3f ret;
+			ret[0] = vec[0];
+			ret[1] = vec[1];
+			ret[2] = vec[2];
+			return ret; 
+		}
+
+		static v8::Handle<v8::Value> ToJS(cv::Vec3f const& v){
+
+			std::vector<float> ret;
+			ret.push_back(v[0]);
+			ret.push_back(v[1]);
+			ret.push_back(v[2]);
+
+			return Convert<std::vector<float> >::ToJS(ret);
+		}
+
+	};
+
+	template<> struct Convert<cv::Vec2f>{
+
+		static bool Is(v8::Handle<v8::Value> v){
+			return !v.IsEmpty() && v->IsArray();
+		}
+
+		static cv::Vec2f FromJS(v8::Handle<v8::Value> v, int nArg){
+			const char* msg = "Array of 2 values expected (Vec3f)";
+			if (!Is(v)) BEATHROW();
+
+			v8::HandleScope scope; 
+
+			std::vector<float> vec = Convert<std::vector<float> >::FromJS(v, nArg);
+
+			if (vec.size() < 2)
+				BEATHROW();
+
+			cv::Vec2f ret;
+
+			ret[0] = vec[0];
+			ret[1] = vec[1];
+			return ret; 
+		}
+
+		static v8::Handle<v8::Value> ToJS(cv::Vec2f const& v){
+			std::vector<float> ret;
+			ret.push_back(v[0]);
+			ret.push_back(v[1]);
+			return Convert<std::vector<float> >::ToJS(ret);
+		}
+
+	};
+
+
 	template<> struct Convert<cv::Scalar> {
 		static bool Is(v8::Handle<v8::Value> v) {
 			return !v.IsEmpty() && v->IsArray();
@@ -59,7 +130,15 @@ namespace bea{
 			return ret; 
 		}
 
+		static v8::Handle<v8::Value> ToJS(const std::vector<cv::Mat>& val){
+			std::vector<cv::Mat*> retVal;
+			for (size_t k = 0; k < val.size(); k++)
+				retVal.push_back (new cv::Mat(val[k]));
+
+			return Convert<std::vector<cv::Mat*> >::ToJS(retVal);
+		}
 	};
+
 
 }
 

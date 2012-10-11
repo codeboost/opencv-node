@@ -1,4 +1,5 @@
 @namespace cv
+
 	@static OpenCV 
 
 		void GaussianBlur(const Mat& src, Mat& dst, Size ksize, double sigmaX, double sigmaY=0, int borderType=cv::BORDER_DEFAULT)
@@ -243,7 +244,12 @@
 			//void merge(const Mat* mv, size_t count, Mat& dst)
 			THROW_IF_NOT(mv.size() > 0, "Empty array");
 		
-		void split(const Mat& mtx, std::vector<cv::Mat>& mv)
+		std::vector<cv::Mat> split(const Mat& mtx)
+			@call
+				std::vector<cv::Mat> fnRetVal;
+				cv::split(*mtx, fnRetVal);
+				 
+				
 		void fillConvexPoly(Mat& img, const std::vector<cv::Point> &pts, const Scalar& color, int lineType=8, int shift=0)
 			//calling void fillConvexPoly(Mat& img, const Point* pts, int npts, const Scalar& color, int lineType=8, int shift=0)
 			@call cv::fillConvexPoly(*img, &pts[0], pts.size(), color, lineType, shift);
@@ -258,11 +264,41 @@
 		#HighGUI
 		Mat imdecode(const Mat& buf, int flags)
 		Mat imread(const std::string& filename, int flags=1)
+			@call
+				cv::Mat tmp = cv::imread(filename, flags);
+				THROW_IF_NOT(tmp.total() > 0, "Couldn't load file");
+				cv::Mat* fnRetVal = new Mat(tmp);
+				
 		bool imwrite(const std::string& filename, const Mat& img, const std::vector<int>& params=std::vector<int>())
 		int waitKey(int delay = 0)
 		
+		std::vector<cv::Vec3f> HoughCircles(Mat& image, int method, double dp, double minDist, double param1=100, double param2=100, int minRadius=0, int maxRadius=0)
+			@call	
+				std::vector<cv::Vec3f> fnRetVal;
+				cv::HoughCircles(*image, fnRetVal, method, dp, minDist, param1, param2, minRadius, maxRadius);
+				
+				
+		std::vector<cv::Vec2f> HoughLines(Mat& image, double rho, double theta, int threshold, double srn=0, double stn=0)
+			@call
+				std::vector<cv::Vec2f> fnRetVal;
+				cv::HoughLines(*image, fnRetVal, rho, theta, threshold, srn, stn);
+				
+		void preCornerDetect(const Mat& src, Mat& dst, int apertureSize, int borderType=BORDER_DEFAULT)
+		void goodFeaturesToTrack(const Mat& image, std::vector<Point2f>& corners, int maxCorners, double qualityLevel, double minDistance, const Mat& mask=Mat(), int blockSize=3, bool useHarrisDetector=false, double k=0.04)
+		std::vector<cv::Point2f> cornerSubPix(const Mat& image, Size winSize, Size zeroZone, TermCriteria criteria)
+			@call
+				std::vector<cv::Point2f> fnRetVal;
+				cv::cornerSubPix(*image, fnRetVal, winSize, zeroZone, criteria);
+				
+		void cornerMinEigenVal(const Mat& src, Mat& dst, int blockSize, int apertureSize=3, int borderType=BORDER_DEFAULT)
+		void cornerHarris(const Mat& src, Mat& dst, int blockSize, int apertureSize, double k, int borderType=BORDER_DEFAULT)
+		void cornerEigenValsAndVecs(const Mat& src, Mat& dst, int blockSize, int apertureSize, int borderType=BORDER_DEFAULT)
+		
+		@manual void cvSmooth(const Mat& src, Mat& dst, int smoothtype=CV_GAUSSIAN, int param1=3, int param2=0, double param3=0, double param4=0)
+		
+		
 		#Manual functions
-		#@manual void discardMats()
+		@manual void discardMats()
 		@manual void fillPoly(Mat& img, const Point** pts, const int* npts, int ncontours, const Scalar& color, int lineType=8, int shift=0, Point offset=Point())
 		@manual Size getTextSize(const std::string& text, int fontFace, double fontScale, int thickness, int* baseLine)
 		@manual void polylines(Mat& img, const Point** pts, const int* npts, int ncontours, bool isClosed, const Scalar& color, int thickness=1, int lineType=8, int shift=0)

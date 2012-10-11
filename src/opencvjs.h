@@ -33,6 +33,7 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> locateROI(const v8::Arguments& args);
 			static v8::Handle<v8::Value> adjustROI(const v8::Arguments& args);
 			static v8::Handle<v8::Value> step1(const v8::Arguments& args);
+			static v8::Handle<v8::Value> indexable(const v8::Arguments& args);
 			//Accessors - Getters
 			static v8::Handle<v8::Value> accGet_width(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
 			static v8::Handle<v8::Value> accGet_height(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
@@ -44,6 +45,8 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> accGet_empty(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
 			static v8::Handle<v8::Value> accGet_depth(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
 			static v8::Handle<v8::Value> accGet_total(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_rows(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_cols(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
 			//Accessors - Setters
 			static void accSet_width(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
 			static void accSet_height(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
@@ -55,6 +58,8 @@ namespace opencvjs {
 			static void accSet_empty(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
 			static void accSet_depth(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
 			static void accSet_total(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_rows(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_cols(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
 		public:
 			static void _InitJSObject(v8::Handle<v8::Object> target);
 	};
@@ -189,6 +194,16 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> imread(const v8::Arguments& args);
 			static v8::Handle<v8::Value> imwrite(const v8::Arguments& args);
 			static v8::Handle<v8::Value> waitKey(const v8::Arguments& args);
+			static v8::Handle<v8::Value> HoughCircles(const v8::Arguments& args);
+			static v8::Handle<v8::Value> HoughLines(const v8::Arguments& args);
+			static v8::Handle<v8::Value> preCornerDetect(const v8::Arguments& args);
+			static v8::Handle<v8::Value> goodFeaturesToTrack(const v8::Arguments& args);
+			static v8::Handle<v8::Value> cornerSubPix(const v8::Arguments& args);
+			static v8::Handle<v8::Value> cornerMinEigenVal(const v8::Arguments& args);
+			static v8::Handle<v8::Value> cornerHarris(const v8::Arguments& args);
+			static v8::Handle<v8::Value> cornerEigenValsAndVecs(const v8::Arguments& args);
+			static v8::Handle<v8::Value> cvSmooth(const v8::Arguments& args);
+			static v8::Handle<v8::Value> discardMats(const v8::Arguments& args);
 			static v8::Handle<v8::Value> fillPoly(const v8::Arguments& args);
 			static v8::Handle<v8::Value> getTextSize(const v8::Arguments& args);
 			static v8::Handle<v8::Value> polylines(const v8::Arguments& args);

@@ -1,5 +1,10 @@
 @namespace cv	
 
+	@type TermCriteria
+		int type
+		int maxCount
+		double epsilon
+
 	@type Point
 		int x
 		int y
@@ -38,3 +43,9 @@
 	@type std::vector<int>
 	@type std::vector<cv::Mat*>
 	@type std::vector<cv::Mat>
+	@type Vec3f
+	@type std::vector<Vec3f>
+	@type Vec2f
+	@type std::vector<Vec2f>
+	@type std::vector<Point2f>
+	

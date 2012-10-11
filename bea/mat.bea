@@ -53,6 +53,7 @@
 		
 		Mat diag(int d)
 		Mat clone()
+
 		void copyTo(Mat& m ) 
 		void copyTo(Mat& m, const Mat& mask)
 		void convertTo(Mat& m, int rtype, double alpha=1, double beta=0) 
@@ -94,6 +95,13 @@
 		void locateROI(Size& wholeSize, Point& ofs)
 		Mat& adjustROI(int dtop, int dbottom, int dleft, int dright)
 		size_t step1()
+		void indexable()
+			@call
+				int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+				args.This()->SetIndexedPropertiesToExternalArrayData(_this->datastart, v8::kExternalUnsignedByteArray, bytes);
+
+		
+		
 		#size_t total() 
 		#bool isContinuous() 
 		#size_t elemSize()
@@ -142,4 +150,9 @@
 		@accessor total int
 			@get _this->total()
 			@set 
-			
+		@accessor rows int
+			@get _this->rows
+			@set
+		@accessor cols int
+			@get _this->cols
+			@set
