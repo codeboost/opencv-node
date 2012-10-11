@@ -2410,6 +2410,7 @@ namespace opencvjs {
 		cv::Mat* mtx = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 		std::vector<cv::Mat> mv = bea::Convert<std::vector<cv::Mat> >::FromJS(args[1], 1);
 		cv::split(*mtx, mv);
+		//args[1] = bea::Convert<std::vector<cv::Mat> >::ToJS(mv);
 		return args.This();
 		METHOD_END();
 	}

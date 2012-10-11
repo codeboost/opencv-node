@@ -58,6 +58,7 @@ namespace bea{
 				ret.push_back(*matV[k]);
 			return ret; 
 		}
+
 	};
 
 }
