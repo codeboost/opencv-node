@@ -1,23 +1,15 @@
-Opencvjs
-
 Purpose 
 =======
 Expose opencv to the node environment.
 
 Features
-======
+========
 	
 	- cv::Point, cv::Size, cv::Rect, etc replaced by object notation:
 		Point -> {x: 0, y:0}, Size -> {width: 33, height: 33}
 
 	- Checks the types of parameters as well as ranges of values on each native call (harder to crash app from script)
 	- Friendly exception messages on invalid parameters 
-	
-
-Installation
-============
-
-	npm install opencv
 
 Example
 =======
@@ -25,26 +17,25 @@ Example
 See scripts/effects.coffee for a full demo.
 
 
-Building on MacOS X
-====================
+Installation - MacOS X 
+=======================
 
 	$ brew install opencv --build32
 	$ npm install -g opencv-node
 	$ coffee scripts/tests
 
+(tested with GCC 4.2.1 and node 0.8.0)
 
-Building on Windows:
+Installation - Windows 
+=======================
+1. Download OpenCV from http://sourceforge.net/projects/opencvlibrary/files/latest/download
+2. Extract it to a folder, eg C:\OpenCV
+3. Open a Visual Studio command prompt and type
 
-1. OpenCV must be installed. Download latest version from http://sourceforge.net/projects/opencvlibrary/files/latest/download
-2. Extract to a folder, eg C:\OpenCV
-3. Open a command prompt and set the environment variable OPENCV_ROOT:
+		set OPENCV_ROOT=C:/OpenCV
+		npm install -g opencv-node
 
-	set OPENCV_ROOT=C:/OpenCV
-
-4. Install opencv-node with npm:
-
-	npm install -g opencv-node
-
+(tested with Visual Studio 2010 and node 0.8.8)
 
 API Differences
 
@@ -57,3 +48,6 @@ The void functions which return their output in an argument passed by reference,
 	cv::cornerSubPix returns an Array
 
 	* others?
+
+
+
