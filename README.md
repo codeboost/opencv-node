@@ -34,15 +34,16 @@ Building on MacOS X
 
 
 Building on Windows:
-	1. OpenCV must be installed. Download latest version from http://sourceforge.net/projects/opencvlibrary/files/latest/download
-	2. Extract to a folder, eg C:\OpenCV
-	3. Open a command prompt and set the environment variable OPENCV_ROOT:
 
-			set OPENCV_ROOT=C:/OpenCV
+1. OpenCV must be installed. Download latest version from http://sourceforge.net/projects/opencvlibrary/files/latest/download
+2. Extract to a folder, eg C:\OpenCV
+3. Open a command prompt and set the environment variable OPENCV_ROOT:
 
-	4. Install opencv-node with npm:
+	set OPENCV_ROOT=C:/OpenCV
 
-			npm install -g opencv-node
+4. Install opencv-node with npm:
+
+	npm install -g opencv-node
 
 
 API Differences
