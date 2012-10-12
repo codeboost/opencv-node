@@ -49,5 +49,13 @@ The void functions which return their output in an argument passed by reference,
 
 	* others?
 
+License
+=======
+BSD
 
+Disclaimer
+==========
+
+Please report any bugs or missing functions. This module has never been used in production and is generally 
+meant to be used for experimentation. 
 
