@@ -1,3 +1,6 @@
+#Primitive unit tests. 
+#If it runs without crashing, then the addon has been successfully installed
+
 cv = require './opencv'
 Mat = cv.Mat
 

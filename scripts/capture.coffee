@@ -1,3 +1,4 @@
+#Shows how to capture an image from the camera
 cv = require './opencv'
 VideoCapture = cv.VideoCapture
 Mat = cv.Mat
@@ -15,6 +16,9 @@ testCapture = ->
 	cv.namedWindow "output", 1
 
 	running = true
+	#note that in a real script you would want to use process.nextTick() to do the capture,
+	#otherwise the script engine will be forever busy running this while
+	#See effects.coffee
 	while running
 
 		frame = new Mat
