@@ -22,7 +22,7 @@ Installation
 Example
 =======
 
-	cv = require 'opencv'
+See scripts/effects.coffee for a full demo.
 
 
 Building on MacOS X
