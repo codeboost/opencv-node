@@ -8,8 +8,14 @@
 		],
 		'cflags!': [ '-fno-exceptions' ],
 		'cflags_cc!': [ '-fno-exceptions' ],
-		'cflags_cc!': [ '-fno-rtti' ],
 		'conditions': [
+			[ 'OS=="linux" or OS=="freebsd" or OS=="openbsd" or OS=="solaris"',
+			  {
+				'cflags_cc!': ['-fno-rtti'],
+				'cflags_cc+': ['-frtti'],
+			  }
+			],
+
 	        ['OS=="mac"', {
 	        	'include_dirs':['/usr/local/include/opencv'],
 	          'xcode_settings': {
