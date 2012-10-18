@@ -8,6 +8,7 @@
 		],
 		'cflags!': [ '-fno-exceptions' ],
 		'cflags_cc!': [ '-fno-exceptions' ],
+		'cflags_cc!': [ '-fno-rtti' ],
 		'conditions': [
 	        ['OS=="mac"', {
 	        	'include_dirs':['/usr/local/include/opencv'],
