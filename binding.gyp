@@ -9,6 +9,14 @@
 		'cflags!': [ '-fno-exceptions' ],
 		'cflags_cc!': [ '-fno-exceptions' ],
 		'conditions': [
+			[ 'OS=="linux" or OS=="freebsd" or OS=="openbsd" or OS=="solaris"',{
+				'ldflags': [ '<!@(pkg-config --libs --libs-only-other opencv)' ],
+				'libraries': [ '<!@(pkg-config --libs opencv)' ],
+				'cflags': [ '<!@(pkg-config --cflags opencv)' ],
+				'cflags_cc': [ '<!@(pkg-config --cflags opencv)' ],
+				'cflags_cc!': ['-fno-rtti'],
+				'cflags_cc+': ['-frtti']
+			}],
 	        ['OS=="mac"', {
 	        	'include_dirs':['/usr/local/include/opencv'],
 	          'xcode_settings': {
