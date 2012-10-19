@@ -16,6 +16,7 @@ result = src.clone()
 
 cascade = new cv.CascadeClassifier
 
+#The 'data' folder from opencv considered to be in current directory 
 if not cascade.load 'data/haarcascades/haarcascade_eye.xml'
 		console.log 'Cascade load failed'
 		return
