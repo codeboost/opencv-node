@@ -267,6 +267,21 @@ namespace bea {
 		
 	};
 	
+	template<> struct Convert<cv::CascadeClassifier*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::CascadeClassifier>::Is(v);
+		}
+		
+		static cv::CascadeClassifier* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::CascadeClassifier>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::CascadeClassifier* const& v) {
+			return bea::ExposedClass<cv::CascadeClassifier>::ToJS(v);
+		}
+		
+	};
+	
 }
 
 DECLARE_EXPOSED_CLASS(cv::Mat);
@@ -2797,6 +2812,74 @@ namespace opencvjs {
 	
 }
 
+DECLARE_EXPOSED_CLASS(cv::CascadeClassifier);
+namespace opencvjs {
+	v8::Handle<v8::Value> JCascadeClassifier::__constructor(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//CascadeClassifier()
+		cv::CascadeClassifier* fnRetVal = new cv::CascadeClassifier();
+		return v8::External::New(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JCascadeClassifier::empty(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//bool empty()
+		cv::CascadeClassifier* _this = bea::Convert<cv::CascadeClassifier*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->empty();
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JCascadeClassifier::load(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//bool load(const std::string& filename)
+		std::string filename = bea::Convert<std::string>::FromJS(args[0], 0);
+		cv::CascadeClassifier* _this = bea::Convert<cv::CascadeClassifier*>::FromJS(args.This(), 0);
+		bool fnRetVal = _this->load(filename);
+		return bea::Convert<bool>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JCascadeClassifier::detectMultiScale(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//std::vector<Rect> detectMultiScale(const Mat& image, double scaleFactor=1.1, int minNeighbours=3, int flags = 0, Size minSize=Size())
+		cv::Mat* image = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		double scaleFactor = bea::Optional<double>::FromJS(args, 1, 1.1);
+		int minNeighbours = bea::Optional<int>::FromJS(args, 2, 3);
+		int flags = bea::Optional<int>::FromJS(args, 3,  0);
+		cv::Size minSize = bea::Optional<cv::Size>::FromJS(args, 4, cv::Size());
+		cv::CascadeClassifier* _this = bea::Convert<cv::CascadeClassifier*>::FromJS(args.This(), 0);
+		std::vector<cv::Rect> fnRetVal;
+		_this->detectMultiScale(*image, fnRetVal, scaleFactor, minNeighbours, flags, minSize);
+			
+		return bea::Convert<std::vector<Rect> >::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JCascadeClassifier::__postAllocator(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void __postAllocator()
+		cv::CascadeClassifier* _this = bea::Convert<cv::CascadeClassifier*>::FromJS(args.This(), 0);
+		return args.This();
+		METHOD_END();
+	}
+	
+	void JCascadeClassifier::_InitJSObject(v8::Handle<v8::Object> target) {
+		bea::ExposedClass<cv::CascadeClassifier>* obj = EXPOSE_CLASS(cv::CascadeClassifier, "CascadeClassifier");
+		//Exposed Methods
+		obj->setConstructor(__constructor);
+		obj->exposeMethod("empty", empty);
+		obj->exposeMethod("load", load);
+		obj->exposeMethod("detectMultiScale", detectMultiScale);
+		obj->setPostAllocator(__postAllocator);
+		//Accessors
+		//Expose object to the Javascript
+		obj->exposeTo(target);
+	}
+	
+}
+
 namespace opencvjs {
 	void ExposeConstants(v8::Handle<v8::Object> target) {
 		BEA_DEFINE_CONSTANT(target, CV_8U);
@@ -3082,8 +3165,6 @@ namespace opencvjs {
 		BEA_DEFINE_CONSTANT(target, CV_MEDIAN);
 		BEA_DEFINE_CONSTANT(target, CV_BILATERAL);
 		BEA_DEFINE_CONSTANT(target, CV_GAUSSIAN_5x5);
-		//BEA_DEFINE_CONSTANT(target, CV_INPAINT_NS);
-		//BEA_DEFINE_CONSTANT(target, CV_INPAINT_TELEA);
 		BEA_DEFINE_CONSTANT(target, CV_SCHARR);
 		BEA_DEFINE_CONSTANT(target, CV_MAX_SOBEL_KSIZE);
 		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SIMPLEX);
@@ -3105,6 +3186,7 @@ namespace opencvjs {
 		JVideoCapture::_InitJSObject(target);
 		JVideoWriter::_InitJSObject(target);
 		JOpenCV::_InitJSObject(target);
+		JCascadeClassifier::_InitJSObject(target);
 		ExposeConstants(target);
 	}
 	

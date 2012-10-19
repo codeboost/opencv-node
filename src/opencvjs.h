@@ -218,6 +218,21 @@ namespace opencvjs {
 }
 
 namespace opencvjs {
+	class JCascadeClassifier {
+		protected:
+			//Exported methods
+			static v8::Handle<v8::Value> __constructor(const v8::Arguments& args);
+			static v8::Handle<v8::Value> empty(const v8::Arguments& args);
+			static v8::Handle<v8::Value> load(const v8::Arguments& args);
+			static v8::Handle<v8::Value> detectMultiScale(const v8::Arguments& args);
+			static v8::Handle<v8::Value> __postAllocator(const v8::Arguments& args);
+		public:
+			static void _InitJSObject(v8::Handle<v8::Object> target);
+	};
+	
+}
+
+namespace opencvjs {
 	static void ExposeConstants(v8::Handle<v8::Object> target);
 }
 

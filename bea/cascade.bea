@@ -1,0 +1,9 @@
+@namespace cv
+	@class CascadeClassifier
+		CascadeClassifier()
+		bool empty()
+		bool load(const std::string& filename)
+		std::vector<Rect> detectMultiScale(const Mat& image, double scaleFactor=1.1, int minNeighbours=3, int flags = 0, Size minSize=Size())
+			@call
+				std::vector<cv::Rect> fnRetVal;
+				_this->detectMultiScale(*image, fnRetVal, scaleFactor, minNeighbours, flags, minSize);

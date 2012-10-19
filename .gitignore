@@ -2,3 +2,5 @@ build/
 node-test/
 node_modules
 .lock-wscript
+scripts/data
+scripts/lena.jpg
