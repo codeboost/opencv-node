@@ -117,6 +117,7 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> namedWindow(const v8::Arguments& args);
 			static v8::Handle<v8::Value> imshow(const v8::Arguments& args);
 			static v8::Handle<v8::Value> dilate(const v8::Arguments& args);
+			static v8::Handle<v8::Value> erode(const v8::Arguments& args);
 			static v8::Handle<v8::Value> absdiff(const v8::Arguments& args);
 			static v8::Handle<v8::Value> add(const v8::Arguments& args);
 			static v8::Handle<v8::Value> bitwise_and(const v8::Arguments& args);

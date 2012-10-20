@@ -1375,6 +1375,22 @@ namespace opencvjs {
 		METHOD_END();
 	}
 	
+	v8::Handle<v8::Value> JOpenCV::erode(const v8::Arguments& args) {
+		METHOD_BEGIN(3);
+		//void erode(const Mat& src, Mat& dst, const Mat& element, Point anchor=Point(-1, -1), int iterations=1, int borderType=cv::BORDER_CONSTANT, const Scalar& borderValue=cv::morphologyDefaultBorderValue())
+		cv::Mat* src = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		cv::Mat* dst = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		cv::Mat* element = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
+		cv::Point anchor = bea::Optional<cv::Point>::FromJS(args, 3, cv::Point(-1, -1));
+		int iterations = bea::Optional<int>::FromJS(args, 4, 1);
+		int borderType = bea::Optional<int>::FromJS(args, 5, cv::BORDER_CONSTANT);
+		cv::Scalar borderValue = bea::Optional<cv::Scalar>::FromJS(args, 6, cv::morphologyDefaultBorderValue());
+		REQUIRE_SAME_SIZE_TYPE(src, dst);
+		cv::erode(*src, *dst, *element, anchor, iterations, borderType, borderValue);
+		return args.This();
+		METHOD_END();
+	}
+	
 	v8::Handle<v8::Value> JOpenCV::absdiff(const v8::Arguments& args) {
 		METHOD_BEGIN(3);
 		//void absdiff(const Mat& src1, const Mat& src2, Mat& dst)
