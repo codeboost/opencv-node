@@ -35,6 +35,12 @@
 		Point2f center
 		Size2f size
 		float angle
+
+	@type minMaxLocRet
+		double minVal
+		double maxVal 
+		int minIdx 
+		int maxIdx
 		
 	@type Scalar 
 	@type std::string

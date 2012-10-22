@@ -1,0 +1,87 @@
+@namespace cv
+	@class SparseMat
+
+		@destructor
+			delete _this;
+		
+		SparseMat()
+
+		#SparseMat
+		SparseMat(std::vector<int> sizes, int type)
+			//@orgapi SparseMat(int dims, const int* _sizes, int _type);
+			@call
+				cv::SparseMat* fnRetVal = new cv::SparseMat(sizes.size(), &sizes[0], type);
+
+		SparseMat(const Mat& m)
+		~SparseMat()
+
+		SparseMat clone()
+		void copyTo(SparseMat& m)
+		void copyTo(Mat& m)
+		void convertTo(SparseMat& m, int rtype, double alpha = 1)
+		void convertTo(Mat& m, int rtype, double alpha=1, double beta=0)
+		void create(std::vector<int> sizes, int type)
+			//@orgapi void create(int dims, const int* _sizes, int _type);
+			@call
+				_this->create(sizes.size(), &sizes[0], type);
+		void clear()
+
+		#void addref();
+		#void release(); 
+		size_t hash(int i0)
+		size_t hash(int i0, int i1)
+		size_t hash(int i0, int i1, int i2)
+		size_t hash(std::vector<int> idx)
+			@call
+				THROW_IF_NOT(idx.size() == _this->dims(), "Input array must have size equal to dims()");
+				size_t fnRetVal = _this->hash(&idx[0]);	
+
+		int size(int i)
+		std::vector<int> size()
+			//@orgapi int* size() 
+			@call
+				const int* sizeptr = _this->size();
+				std::vector<int> fnRetVal(sizeptr, sizeptr + _this->dims());
+
+		@accessor elemSize size_t
+			@get _this->elemSize()
+			@set
+		@accessor elemSize1 size_t
+			@get _this->elemSize1()
+			@set		
+		@accessor type int
+			@get _this->type()
+			@set
+		@accessor depth int
+			@get _this->depth()
+			@set
+		@accessor channels int
+			@get _this->channels()
+			@set
+		@accessor dims int
+			@get _this->dims()
+			@set
+		@accessor nzcount size_t
+			@get _this->nzcount()
+			@set
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

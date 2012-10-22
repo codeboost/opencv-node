@@ -222,6 +222,36 @@ namespace bea {
 		
 	};
 	
+	template<> struct Convert<cv::minMaxLocRet> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::minMaxLocRet FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: minVal, maxVal, minIdx, maxIdx. This will be cast to 'cv::minMaxLocRet'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::minMaxLocRet ret;
+			ret.minVal = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("minVal")), nArg);
+			ret.maxVal = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("maxVal")), nArg);
+			ret.minIdx = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("minIdx")), nArg);
+			ret.maxIdx = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("maxIdx")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::minMaxLocRet const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("minVal"), bea::Convert<double>::ToJS(v.minVal));
+			obj->Set(v8::String::NewSymbol("maxVal"), bea::Convert<double>::ToJS(v.maxVal));
+			obj->Set(v8::String::NewSymbol("minIdx"), bea::Convert<int>::ToJS(v.minIdx));
+			obj->Set(v8::String::NewSymbol("maxIdx"), bea::Convert<int>::ToJS(v.maxIdx));
+			return scope.Close(obj);
+		}
+		
+	};
+	
 	template<> struct Convert<cv::Mat*> {
 		static bool Is(v8::Handle<v8::Value> v) {
 			return bea::ExposedClass<cv::Mat>::Is(v);
@@ -263,6 +293,21 @@ namespace bea {
 		
 		static v8::Handle<v8::Value> ToJS(cv::VideoWriter* const& v) {
 			return bea::ExposedClass<cv::VideoWriter>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::SparseMat*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::SparseMat>::Is(v);
+		}
+		
+		static cv::SparseMat* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::SparseMat>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::SparseMat* const& v) {
+			return bea::ExposedClass<cv::SparseMat>::ToJS(v);
 		}
 		
 	};
@@ -371,7 +416,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat();
 			return v8::External::New(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::__constructor: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -417,7 +462,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat(_this->rowRange(r));
 			return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::rowRange: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -441,7 +486,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat(_this->colRange(r));
 			return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::colRange: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -481,7 +526,7 @@ namespace opencvjs {
 			_this->copyTo(*m);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::copyTo: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -609,7 +654,7 @@ namespace opencvjs {
 			_this->create(size, type);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::create: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -633,7 +678,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat(_this->eye(size, type));
 			return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::eye: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -656,7 +701,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat(_this->ones(size, type));
 			return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::ones: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -679,7 +724,7 @@ namespace opencvjs {
 			cv::Mat* fnRetVal = new cv::Mat(_this->zeros(size, type));
 			return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Mat::zeros: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -962,6 +1007,7 @@ namespace opencvjs {
 		obj->exposeMethod("adjustROI", adjustROI);
 		obj->exposeMethod("step1", step1);
 		obj->exposeMethod("indexable", indexable);
+		obj->exposeMethod("at", at);
 		//Accessors
 		obj->exposeProperty("width", accGet_width, accSet_width);
 		obj->exposeProperty("height", accGet_height, accSet_height);
@@ -1002,7 +1048,7 @@ namespace opencvjs {
 			cv::VideoCapture* fnRetVal = new cv::VideoCapture();
 			return v8::External::New(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("VideoCapture::__constructor: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1022,7 +1068,7 @@ namespace opencvjs {
 			bool fnRetVal = _this->open(device);
 			return bea::Convert<bool>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("VideoCapture::open: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1142,7 +1188,7 @@ namespace opencvjs {
 			cv::VideoWriter* fnRetVal = new cv::VideoWriter();
 			return v8::External::New(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("VideoWriter::__constructor: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1196,6 +1242,326 @@ namespace opencvjs {
 		obj->exposeMethod("write", write);
 		obj->setPostAllocator(__postAllocator);
 		//Accessors
+		//Expose object to the Javascript
+		obj->exposeTo(target);
+	}
+	
+}
+
+DECLARE_EXPOSED_CLASS(cv::SparseMat);
+namespace opencvjs {
+	void JSparseMat::__destructor(v8::Handle<v8::Value> value) {
+		DESTRUCTOR_BEGIN();
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(value, 0);
+		delete _this;
+		DESTRUCTOR_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::__constructor(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//SparseMat(std::vector<int> sizes, int type)
+		if (bea::Convert<std::vector<int> >::Is(args[0]) && bea::Convert<int>::Is(args[1])) {
+			std::vector<int> sizes = bea::Convert<std::vector<int> >::FromJS(args[0], 0);
+			int type = bea::Convert<int>::FromJS(args[1], 1);
+			//@orgapi SparseMat(int dims, const int* _sizes, int _type);
+			cv::SparseMat* fnRetVal = new cv::SparseMat(sizes.size(), &sizes[0], type);
+				
+			return bea::Convert<cv::SparseMat*>::ToJS(fnRetVal);
+		}
+		//SparseMat(const Mat& m)
+		if (bea::Convert<cv::Mat*>::Is(args[0])) {
+			cv::Mat* m = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+			cv::SparseMat* fnRetVal = new cv::SparseMat(*m);
+			return v8::External::New(fnRetVal);
+		}
+		//SparseMat()
+		if (args.Length() == 0) {
+			cv::SparseMat* fnRetVal = new cv::SparseMat();
+			return v8::External::New(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("SparseMat::__constructor: Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::clone(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//SparseMat clone()
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+		cv::SparseMat* fnRetVal = new cv::SparseMat(_this->clone());
+		return bea::Convert<cv::SparseMat*>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::copyTo(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//void copyTo(SparseMat& m)
+		if (bea::Convert<cv::SparseMat*>::Is(args[0])) {
+			cv::SparseMat* m = bea::Convert<cv::SparseMat*>::FromJS(args[0], 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			_this->copyTo(*m);
+			return args.This();
+		}
+		//void copyTo(Mat& m)
+		if (bea::Convert<cv::Mat*>::Is(args[0])) {
+			cv::Mat* m = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			_this->copyTo(*m);
+			return args.This();
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("SparseMat::copyTo: Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::convertTo(const v8::Arguments& args) {
+		METHOD_BEGIN(2);
+		//void convertTo(SparseMat& m, int rtype, double alpha = 1)
+		if (bea::Convert<cv::SparseMat*>::Is(args[0]) && bea::Convert<int>::Is(args[1]) && bea::Optional<double>::Is(args, 2)) {
+			cv::SparseMat* m = bea::Convert<cv::SparseMat*>::FromJS(args[0], 0);
+			int rtype = bea::Convert<int>::FromJS(args[1], 1);
+			double alpha = bea::Optional<double>::FromJS(args, 2,  1);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			_this->convertTo(*m, rtype, alpha);
+			return args.This();
+		}
+		//void convertTo(Mat& m, int rtype, double alpha=1, double beta=0)
+		if (bea::Convert<cv::Mat*>::Is(args[0]) && bea::Convert<int>::Is(args[1]) && bea::Optional<double>::Is(args, 2) && bea::Optional<double>::Is(args, 3)) {
+			cv::Mat* m = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+			int rtype = bea::Convert<int>::FromJS(args[1], 1);
+			double alpha = bea::Optional<double>::FromJS(args, 2, 1);
+			double beta = bea::Optional<double>::FromJS(args, 3, 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			_this->convertTo(*m, rtype, alpha, beta);
+			return args.This();
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("SparseMat::convertTo: Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::create(const v8::Arguments& args) {
+		METHOD_BEGIN(2);
+		//void create(std::vector<int> sizes, int type)
+		std::vector<int> sizes = bea::Convert<std::vector<int> >::FromJS(args[0], 0);
+		int type = bea::Convert<int>::FromJS(args[1], 1);
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+		//@orgapi void create(int dims, const int* _sizes, int _type);
+		_this->create(sizes.size(), &sizes[0], type);
+			
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::clear(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void clear()
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+		_this->clear();
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::hash(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//size_t hash(int i0, int i1, int i2)
+		if (bea::Convert<int>::Is(args[0]) && bea::Convert<int>::Is(args[1]) && bea::Convert<int>::Is(args[2])) {
+			int i0 = bea::Convert<int>::FromJS(args[0], 0);
+			int i1 = bea::Convert<int>::FromJS(args[1], 1);
+			int i2 = bea::Convert<int>::FromJS(args[2], 2);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			size_t fnRetVal = _this->hash(i0, i1, i2);
+			return bea::Convert<size_t>::ToJS(fnRetVal);
+		}
+		//size_t hash(int i0, int i1)
+		if (bea::Convert<int>::Is(args[0]) && bea::Convert<int>::Is(args[1])) {
+			int i0 = bea::Convert<int>::FromJS(args[0], 0);
+			int i1 = bea::Convert<int>::FromJS(args[1], 1);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			size_t fnRetVal = _this->hash(i0, i1);
+			return bea::Convert<size_t>::ToJS(fnRetVal);
+		}
+		//size_t hash(int i0)
+		if (bea::Convert<int>::Is(args[0])) {
+			int i0 = bea::Convert<int>::FromJS(args[0], 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			size_t fnRetVal = _this->hash(i0);
+			return bea::Convert<size_t>::ToJS(fnRetVal);
+		}
+		//size_t hash(std::vector<int> idx)
+		if (bea::Convert<std::vector<int> >::Is(args[0])) {
+			std::vector<int> idx = bea::Convert<std::vector<int> >::FromJS(args[0], 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			THROW_IF_NOT(idx.size() == _this->dims(), "Input array must have size equal to dims()");
+			size_t fnRetVal = _this->hash(&idx[0]);
+				
+			return bea::Convert<size_t>::ToJS(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("SparseMat::hash: Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::size(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//int size(int i)
+		if (bea::Convert<int>::Is(args[0])) {
+			int i = bea::Convert<int>::FromJS(args[0], 0);
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			int fnRetVal = _this->size(i);
+			return bea::Convert<int>::ToJS(fnRetVal);
+		}
+		//std::vector<int> size()
+		if (args.Length() == 0) {
+			cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+			//@orgapi int* size()
+			const int* sizeptr = _this->size();
+			std::vector<int> fnRetVal(sizeptr, sizeptr + _this->dims());
+				
+			return bea::Convert<std::vector<int> >::ToJS(fnRetVal);
+		}
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("SparseMat::size: Could not determine overload from supplied arguments"))));
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JSparseMat::__postAllocator(const v8::Arguments& args) {
+		METHOD_BEGIN(0);
+		//void __postAllocator()
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(args.This(), 0);
+		return args.This();
+		METHOD_END();
+	}
+	
+	//Get Accessor elemSize (size_t)
+	v8::Handle<v8::Value> JSparseMat::accGet_elemSize( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<size_t>::ToJS(_this->elemSize());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor elemSize (size_t)
+	void JSparseMat::accSet_elemSize(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		size_t _accValue = bea::Convert<size_t>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor elemSize1 (size_t)
+	v8::Handle<v8::Value> JSparseMat::accGet_elemSize1( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<size_t>::ToJS(_this->elemSize1());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor elemSize1 (size_t)
+	void JSparseMat::accSet_elemSize1(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		size_t _accValue = bea::Convert<size_t>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor type (int)
+	v8::Handle<v8::Value> JSparseMat::accGet_type( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->type());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor type (int)
+	void JSparseMat::accSet_type(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor depth (int)
+	v8::Handle<v8::Value> JSparseMat::accGet_depth( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->depth());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor depth (int)
+	void JSparseMat::accSet_depth(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor channels (int)
+	v8::Handle<v8::Value> JSparseMat::accGet_channels( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->channels());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor channels (int)
+	void JSparseMat::accSet_channels(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor dims (int)
+	v8::Handle<v8::Value> JSparseMat::accGet_dims( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<int>::ToJS(_this->dims());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor dims (int)
+	void JSparseMat::accSet_dims(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		int _accValue = bea::Convert<int>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	//Get Accessor nzcount (size_t)
+	v8::Handle<v8::Value> JSparseMat::accGet_nzcount( v8::Local<v8::String> prop, const v8::AccessorInfo& info) {
+		v8::HandleScope scope; 
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		v8::Handle<v8::Value> retVal = bea::Convert<size_t>::ToJS(_this->nzcount());
+		return scope.Close(retVal);
+	}
+	
+	//Set Accessor nzcount (size_t)
+	void JSparseMat::accSet_nzcount(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info) {
+		v8::HandleScope scope;
+		cv::SparseMat* _this = bea::Convert<cv::SparseMat*>::FromJS(info.Holder(), 0); 
+		size_t _accValue = bea::Convert<size_t>::FromJS(v, 0);
+		//TODO: Set value here
+	}
+	
+	void JSparseMat::_InitJSObject(v8::Handle<v8::Object> target) {
+		bea::ExposedClass<cv::SparseMat>* obj = EXPOSE_CLASS(cv::SparseMat, "SparseMat");
+		//Destructor
+		obj->setDestructor(__destructor);
+		//Exposed Methods
+		obj->setConstructor(__constructor);
+		obj->exposeMethod("clone", clone);
+		obj->exposeMethod("copyTo", copyTo);
+		obj->exposeMethod("convertTo", convertTo);
+		obj->exposeMethod("create", create);
+		obj->exposeMethod("clear", clear);
+		obj->exposeMethod("hash", hash);
+		obj->exposeMethod("size", size);
+		obj->setPostAllocator(__postAllocator);
+		//Accessors
+		obj->exposeProperty("elemSize", accGet_elemSize, accSet_elemSize);
+		obj->exposeProperty("elemSize1", accGet_elemSize1, accSet_elemSize1);
+		obj->exposeProperty("type", accGet_type, accSet_type);
+		obj->exposeProperty("depth", accGet_depth, accSet_depth);
+		obj->exposeProperty("channels", accGet_channels, accSet_channels);
+		obj->exposeProperty("dims", accGet_dims, accSet_dims);
+		obj->exposeProperty("nzcount", accGet_nzcount, accSet_nzcount);
 		//Expose object to the Javascript
 		obj->exposeTo(target);
 	}
@@ -1396,7 +1762,7 @@ namespace opencvjs {
 			cv::absdiff(*src1, sc, *dst);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::absdiff: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1436,7 +1802,7 @@ namespace opencvjs {
 			cv::add(*src1, sc, *dst, *mask);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::add: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1465,7 +1831,7 @@ namespace opencvjs {
 			cv::bitwise_and(*src1, sc, *dst, *mask);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::bitwise_and: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1502,7 +1868,7 @@ namespace opencvjs {
 			cv::bitwise_or(*src1, sc, *dst, *mask);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::bitwise_or: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1529,7 +1895,7 @@ namespace opencvjs {
 			cv::bitwise_xor(*src1, sc, *dst, *mask);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::bitwise_xor: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1588,7 +1954,7 @@ namespace opencvjs {
 			cv::compare(*src1, value, *dst, cmpop);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::compare: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1678,7 +2044,7 @@ namespace opencvjs {
 			cv::divide(*src1, *src2, *dst, scale);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::divide: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1714,7 +2080,7 @@ namespace opencvjs {
 			bool fnRetVal = cv::eigen(*src, *eigenvalues, lowindex, highindex);
 			return bea::Convert<bool>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::eigen: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1822,7 +2188,7 @@ namespace opencvjs {
 			cv::inRange(*src, lowerb, upperb, *dst);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::inRange: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1907,7 +2273,7 @@ namespace opencvjs {
 			cv::max(*src1, *src2, *dst);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::max: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1926,7 +2292,7 @@ namespace opencvjs {
 			cv::Scalar fnRetVal = cv::mean(*mtx);
 			return bea::Convert<cv::Scalar>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::mean: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -1965,7 +2331,7 @@ namespace opencvjs {
 			cv::min(*src1, *src2, *dst);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::min: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -2016,7 +2382,7 @@ namespace opencvjs {
 			double fnRetVal = cv::norm(*src1, normType);
 			return bea::Convert<double>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::norm: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -2283,7 +2649,7 @@ namespace opencvjs {
 			cv::subtract(sc, *src2, *dst, *mask);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::subtract: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -2359,7 +2725,7 @@ namespace opencvjs {
 			bool fnRetVal = cv::clipLine(imgRect, pt1, pt2);
 			return bea::Convert<bool>::ToJS(fnRetVal);
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::clipLine: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -2390,7 +2756,7 @@ namespace opencvjs {
 			cv::ellipse(*img, box, color, thickness, lineType);
 			return args.This();
 		}
-		return v8::ThrowException(v8::Exception::Error(v8::String::New(("Could not determine overload from supplied arguments"))));
+		return v8::ThrowException(v8::Exception::Error(v8::String::New(("OpenCV::ellipse: Could not determine overload from supplied arguments"))));
 		METHOD_END();
 	}
 	
@@ -2696,6 +3062,39 @@ namespace opencvjs {
 		METHOD_END();
 	}
 	
+	v8::Handle<v8::Value> JOpenCV::calcHist(const v8::Arguments& args) {
+		METHOD_BEGIN(7);
+		//void calcHist(std::vector<cv::Mat> arrays, std::vector<int> channels, const Mat& mask, cv::SparseMat& hist, int dims, std::vector<int> histSize, std::vector<std::vector<float> > ranges, bool uniform = true, bool accumulate = false)
+		std::vector<cv::Mat> arrays = bea::Convert<std::vector<cv::Mat> >::FromJS(args[0], 0);
+		std::vector<int> channels = bea::Convert<std::vector<int> >::FromJS(args[1], 1);
+		cv::Mat* mask = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
+		cv::SparseMat* hist = bea::Convert<cv::SparseMat*>::FromJS(args[3], 3);
+		int dims = bea::Convert<int>::FromJS(args[4], 4);
+		std::vector<int> histSize = bea::Convert<std::vector<int> >::FromJS(args[5], 5);
+		std::vector<std::vector<float> > ranges = bea::Convert<std::vector<std::vector<float> > >::FromJS(args[6], 6);
+		bool uniform = bea::Optional<bool>::FromJS(args, 7,  true);
+		bool accumulate = bea::Optional<bool>::FromJS(args, 8,  false);
+		std::vector<float*> vranges = std::vector<float*>(ranges.size());
+		for (int k = 0 ; k < ranges.size(); k++){
+		vranges[k] = &((ranges[k])[0]);
+		}
+		cv::calcHist(&arrays[0], arrays.size(), &channels[0], *mask, *hist, dims, &histSize[0], (const float**)&vranges[0], uniform, accumulate);
+			
+		return args.This();
+		METHOD_END();
+	}
+	
+	v8::Handle<v8::Value> JOpenCV::minMaxLoc(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//minMaxLocRet minMaxLoc(const SparseMat& a)
+		cv::SparseMat* a = bea::Convert<cv::SparseMat*>::FromJS(args[0], 0);
+		minMaxLocRet fnRetVal;
+		cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, &fnRetVal.minIdx, &fnRetVal.maxIdx);
+			
+		return bea::Convert<cv::minMaxLocRet>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
 	void JOpenCV::_InitJSObject(v8::Handle<v8::Object> target) {
 		bea::ExposedStatic<JOpenCV>* obj = EXPOSE_STATIC(JOpenCV, "OpenCV");
 		//Exposed Methods
@@ -2796,14 +3195,15 @@ namespace opencvjs {
 		obj->exposeMethod("cornerMinEigenVal", cornerMinEigenVal);
 		obj->exposeMethod("cornerHarris", cornerHarris);
 		obj->exposeMethod("cornerEigenValsAndVecs", cornerEigenValsAndVecs);
+		obj->exposeMethod("calcHist", calcHist);
+		obj->exposeMethod("calcBackProject", calcBackProject);
+		obj->exposeMethod("minMaxLoc", minMaxLoc);
 		obj->exposeMethod("cvSmooth", cvSmooth);
 		obj->exposeMethod("discardMats", discardMats);
 		obj->exposeMethod("fillPoly", fillPoly);
 		obj->exposeMethod("getTextSize", getTextSize);
 		obj->exposeMethod("polylines", polylines);
 		obj->exposeMethod("kmeans", kmeans);
-		obj->exposeMethod("calcHist", calcHist);
-		obj->exposeMethod("calcBackProject", calcBackProject);
 		obj->exposeMethod("detectObject", detectObject);
 		//Accessors
 		//Expose object to the Javascript
@@ -3185,6 +3585,7 @@ namespace opencvjs {
 		JMat::_InitJSObject(target);
 		JVideoCapture::_InitJSObject(target);
 		JVideoWriter::_InitJSObject(target);
+		JSparseMat::_InitJSObject(target);
 		JOpenCV::_InitJSObject(target);
 		JCascadeClassifier::_InitJSObject(target);
 		ExposeConstants(target);

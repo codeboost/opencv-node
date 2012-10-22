@@ -34,6 +34,7 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> adjustROI(const v8::Arguments& args);
 			static v8::Handle<v8::Value> step1(const v8::Arguments& args);
 			static v8::Handle<v8::Value> indexable(const v8::Arguments& args);
+			static v8::Handle<v8::Value> at(const v8::Arguments& args);
 			//Accessors - Getters
 			static v8::Handle<v8::Value> accGet_width(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
 			static v8::Handle<v8::Value> accGet_height(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
@@ -95,6 +96,43 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> isOpened(const v8::Arguments& args);
 			static v8::Handle<v8::Value> write(const v8::Arguments& args);
 			static v8::Handle<v8::Value> __postAllocator(const v8::Arguments& args);
+		public:
+			static void _InitJSObject(v8::Handle<v8::Object> target);
+	};
+	
+}
+
+namespace opencvjs {
+	class JSparseMat {
+		protected:
+			//Destructor
+			static void __destructor(v8::Handle<v8::Value> value);
+			//Exported methods
+			static v8::Handle<v8::Value> __constructor(const v8::Arguments& args);
+			static v8::Handle<v8::Value> clone(const v8::Arguments& args);
+			static v8::Handle<v8::Value> copyTo(const v8::Arguments& args);
+			static v8::Handle<v8::Value> convertTo(const v8::Arguments& args);
+			static v8::Handle<v8::Value> create(const v8::Arguments& args);
+			static v8::Handle<v8::Value> clear(const v8::Arguments& args);
+			static v8::Handle<v8::Value> hash(const v8::Arguments& args);
+			static v8::Handle<v8::Value> size(const v8::Arguments& args);
+			static v8::Handle<v8::Value> __postAllocator(const v8::Arguments& args);
+			//Accessors - Getters
+			static v8::Handle<v8::Value> accGet_elemSize(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_elemSize1(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_type(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_depth(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_channels(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_dims(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			static v8::Handle<v8::Value> accGet_nzcount(v8::Local<v8::String> prop, const v8::AccessorInfo& info);
+			//Accessors - Setters
+			static void accSet_elemSize(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_elemSize1(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_type(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_depth(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_channels(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_dims(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
+			static void accSet_nzcount(v8::Local<v8::String> prop, v8::Local<v8::Value> v, const v8::AccessorInfo& info);
 		public:
 			static void _InitJSObject(v8::Handle<v8::Object> target);
 	};
@@ -202,14 +240,15 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> cornerMinEigenVal(const v8::Arguments& args);
 			static v8::Handle<v8::Value> cornerHarris(const v8::Arguments& args);
 			static v8::Handle<v8::Value> cornerEigenValsAndVecs(const v8::Arguments& args);
+			static v8::Handle<v8::Value> calcHist(const v8::Arguments& args);
+			static v8::Handle<v8::Value> calcBackProject(const v8::Arguments& args);
+			static v8::Handle<v8::Value> minMaxLoc(const v8::Arguments& args);
 			static v8::Handle<v8::Value> cvSmooth(const v8::Arguments& args);
 			static v8::Handle<v8::Value> discardMats(const v8::Arguments& args);
 			static v8::Handle<v8::Value> fillPoly(const v8::Arguments& args);
 			static v8::Handle<v8::Value> getTextSize(const v8::Arguments& args);
 			static v8::Handle<v8::Value> polylines(const v8::Arguments& args);
 			static v8::Handle<v8::Value> kmeans(const v8::Arguments& args);
-			static v8::Handle<v8::Value> calcHist(const v8::Arguments& args);
-			static v8::Handle<v8::Value> calcBackProject(const v8::Arguments& args);
 			static v8::Handle<v8::Value> detectObject(const v8::Arguments& args);
 		public:
 			static void _InitJSObject(v8::Handle<v8::Object> target);

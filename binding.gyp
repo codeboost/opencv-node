@@ -6,8 +6,9 @@
 			'src/opencv_manual.cpp', 
 			'src/opencvjs.cpp'
 		],
-		'cflags!': [ '-fno-exceptions' ],
-		'cflags_cc!': [ '-fno-exceptions' ],
+		'cflags' : ['-Wno-unused-variable'],
+		'cflags!': [ '-fno-exceptions'],
+		'cflags_cc!': [ '-fno-exceptions'],
 		'conditions': [
 			[ 'OS=="linux" or OS=="freebsd" or OS=="openbsd" or OS=="solaris"',{
 				'ldflags': [ '<!@(pkg-config --libs --libs-only-other opencv)' ],

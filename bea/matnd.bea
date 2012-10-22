@@ -1,0 +1,35 @@
+@namespace cv
+	@class MatND
+		@postAllocator
+			int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+			args.This()->SetIndexedPropertiesToExternalArrayData(_this->datastart, v8::kExternalUnsignedByteArray, bytes);
+			v8::V8::AdjustAmountOfExternalAllocatedMemory(bytes);
+			
+		@destructor
+			int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
+			v8::V8::AdjustAmountOfExternalAllocatedMemory(-bytes);
+			delete _this;
+
+	  MatND();
+    MatND(int _ndims, const int* _sizes, int _type);
+    MatND(int _ndims, const int* _sizes, int _type, const Scalar& _s);
+    MatND(const MatND& m);
+    MatND(const MatND& m, const Range* ranges);
+    ~MatND();
+
+    MatND clone() const;
+    void copyTo( MatND& m ) const;
+    void copyTo( MatND& m, const MatND& mask ) const;
+    void convertTo( MatND& m, int rtype, double alpha=1, double beta=0 ) const;
+   	MatND& setTo(const Scalar& s, const MatND& mask=MatND());
+    MatND reshape(int _newcn, int _newndims=0, const int* _newsz=0) const;
+ 	  void create(int _ndims, const int* _sizes, int _type);
+  	bool isContinuous() const;
+    size_t elemSize() const;
+    size_t elemSize1() const;
+    int type() const;
+    int depth() const;
+    int channels() const;
+	  size_t step1(int i) const;
+
+

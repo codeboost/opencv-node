@@ -21,8 +21,10 @@
 @include "types.bea"
 @include "mat.bea"
 @include "videocap.bea"
+@include "sparsemat.bea"
 @include "cv.bea"
 @include "cascade.bea"
+
 
 	
 

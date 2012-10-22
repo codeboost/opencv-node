@@ -4,6 +4,21 @@
 #include <cv.hpp>
 #include <vector>
 
+namespace cv{
+
+		//Helper structure used as return type for the function mixMaxLoc
+		struct minMaxLocRet{
+			double minVal;
+			double maxVal; 
+			int minIdx;
+			int maxIdx;
+			minMaxLocRet(){
+				minVal = maxVal = 0.0;
+				minIdx = maxIdx = 0; 
+			}
+	};
+}
+
 namespace bea{
 
 	template<> struct Convert<cv::Vec3f>{

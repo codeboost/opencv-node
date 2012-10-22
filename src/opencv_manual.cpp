@@ -9,6 +9,47 @@ using namespace cv;
 
 namespace opencvjs {
 
+
+
+	v8::Handle<v8::Value> JMat::at(const v8::Arguments& args) {
+		METHOD_BEGIN(1);
+		//Experimental - not tested
+		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(args.This(), 0);
+		int i = bea::Convert<int>::FromJS(args[0], 0);
+		int j = bea::Optional<int>::FromJS(args, 0, 0); 
+		v8::Handle<v8::Value> retVal; 	
+			switch(_this->depth()){
+				case CV_8U:
+					retVal = bea::Convert<unsigned char>::ToJS(_this->at<unsigned char>(i, j));
+					break;
+				case CV_8S:
+					retVal = bea::Convert<char>::ToJS(_this->at<char>(i, j));
+					break;
+				case CV_16U:
+					retVal = bea::Convert<unsigned short>::ToJS(_this->at<unsigned short>(i, j));
+					break;
+				case CV_16S:
+					retVal = bea::Convert<short>::ToJS(_this->at<short>(i, j));
+					break;
+				case CV_32S:
+					retVal = bea::Convert<int>::ToJS(_this->at<int>(i, j));
+					break;
+				case CV_32F:
+					retVal = bea::Convert<float>::ToJS(_this->at<float>(i, j));
+					break; 
+				case CV_64F:
+					retVal = bea::Convert<double>::ToJS(_this->at<double>(i, j));
+					break; 
+
+				default:
+				break;
+			}
+
+		return retVal;
+		METHOD_END();
+	}
+
+
 	v8::Handle<v8::Value> JOpenCV::discardMats(const v8::Arguments& args) {
 		METHOD_BEGIN(1);
 		v8::HandleScope scope; 
@@ -59,7 +100,8 @@ namespace opencvjs {
 		METHOD_END();
 	}
 
-		
+
+
 	v8::Handle<v8::Value> JOpenCV::fillPoly(const v8::Arguments& args) {
 		METHOD_BEGIN(5);
 		// void fillPoly(Mat& img, const Point** pts, const int* npts, int ncontours, const Scalar& color, int lineType=8, int shift=0, Point offset=Point())
@@ -87,14 +129,6 @@ namespace opencvjs {
 	v8::Handle<v8::Value> JOpenCV::kmeans(const v8::Arguments& args) {
 		METHOD_BEGIN(7);
 		// double kmeans(const Mat& samples, int clusterCount, Mat& labels, TermCriteria termcrit, int attempts, int flags, Mat* centers)
-		//TODO: Enter code here
-		return args.This();
-		METHOD_END();
-	}
-	
-	v8::Handle<v8::Value> JOpenCV::calcHist(const v8::Arguments& args) {
-		METHOD_BEGIN(8);
-		// void calcHist(const Mat* arrays, int narrays, const int* channels, const Mat& mask, SparseMat& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false)
 		//TODO: Enter code here
 		return args.This();
 		METHOD_END();

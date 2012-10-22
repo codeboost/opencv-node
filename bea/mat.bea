@@ -95,13 +95,13 @@
 		void locateROI(Size& wholeSize, Point& ofs)
 		Mat& adjustROI(int dtop, int dbottom, int dleft, int dright)
 		size_t step1()
+
+		#Must be called whenever mat internal data size changes. 
 		void indexable()
 			@call
 				int bytes = sizeof(*_this) + (int)(_this->dataend - _this->datastart);
 				args.This()->SetIndexedPropertiesToExternalArrayData(_this->datastart, v8::kExternalUnsignedByteArray, bytes);
 
-		
-		
 		#size_t total() 
 		#bool isContinuous() 
 		#size_t elemSize()
@@ -109,6 +109,9 @@
 		#int type()
 		#int depth() 
 		#int channels()
+
+		@manual void at(int i, int j)
+
 		
 		#Size size()
 		#bool empty()		
