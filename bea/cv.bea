@@ -294,7 +294,7 @@
 		void cornerHarris(const Mat& src, Mat& dst, int blockSize, int apertureSize, double k, int borderType=BORDER_DEFAULT)
 		void cornerEigenValsAndVecs(const Mat& src, Mat& dst, int blockSize, int apertureSize, int borderType=BORDER_DEFAULT)
 
-		void calcHist(std::vector<cv::Mat> arrays, std::vector<int> channels, const Mat& mask, cv::SparseMat& hist, int dims, std::vector<int> histSize, std::vector<std::vector<float> > ranges, bool uniform = true, bool accumulate = false)
+		void calcHist(std::vector<cv::Mat> arrays, std::vector<int> channels, const Mat& mask, cv::Mat& hist, int dims, std::vector<int> histSize, std::vector<std::vector<float> > ranges, bool uniform = true, bool accumulate = false)
 			#@orgapi void calcHist(const Mat* arrays, int narrays, const int* channels, const Mat& mask, SparseMat& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false)
 			@call
 
@@ -314,11 +314,11 @@
 				}
 				cv::calcBackProject(&arrays[0], arrays.size(), &channels[0], *hist, *backProject, (const float**)&vrangs[0], scale, uniform);
 
-		minMaxLocRet minMaxLoc(const SparseMat& a);
-			#@orgapi void minMaxLoc(const SparseMat& a, double* minVal, double* maxVal, int* minIdx=0, int* maxIdx=0 )
+		minMaxLocRet minMaxLoc(const Mat& a);
+			#@orgapi void minMaxLoc(const Mat& a, double* minVal, double* maxVal, int* minIdx=0, int* maxIdx=0 )
 			@call
 				minMaxLocRet fnRetVal;
-				cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, &fnRetVal.minIdx, &fnRetVal.maxIdx);
+				cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, NULL, NULL);
 
 		@manual void cvSmooth(const Mat& src, Mat& dst, int smoothtype=CV_GAUSSIAN, int param1=3, int param2=0, double param3=0, double param4=0)
 		

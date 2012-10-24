@@ -3064,11 +3064,11 @@ namespace opencvjs {
 	
 	v8::Handle<v8::Value> JOpenCV::calcHist(const v8::Arguments& args) {
 		METHOD_BEGIN(7);
-		//void calcHist(std::vector<cv::Mat> arrays, std::vector<int> channels, const Mat& mask, cv::SparseMat& hist, int dims, std::vector<int> histSize, std::vector<std::vector<float> > ranges, bool uniform = true, bool accumulate = false)
+		//void calcHist(std::vector<cv::Mat> arrays, std::vector<int> channels, const Mat& mask, cv::Mat& hist, int dims, std::vector<int> histSize, std::vector<std::vector<float> > ranges, bool uniform = true, bool accumulate = false)
 		std::vector<cv::Mat> arrays = bea::Convert<std::vector<cv::Mat> >::FromJS(args[0], 0);
 		std::vector<int> channels = bea::Convert<std::vector<int> >::FromJS(args[1], 1);
 		cv::Mat* mask = bea::Convert<cv::Mat*>::FromJS(args[2], 2);
-		cv::SparseMat* hist = bea::Convert<cv::SparseMat*>::FromJS(args[3], 3);
+		cv::Mat* hist = bea::Convert<cv::Mat*>::FromJS(args[3], 3);
 		int dims = bea::Convert<int>::FromJS(args[4], 4);
 		std::vector<int> histSize = bea::Convert<std::vector<int> >::FromJS(args[5], 5);
 		std::vector<std::vector<float> > ranges = bea::Convert<std::vector<std::vector<float> > >::FromJS(args[6], 6);
@@ -3085,11 +3085,11 @@ namespace opencvjs {
 	}
 	
 	v8::Handle<v8::Value> JOpenCV::minMaxLoc(const v8::Arguments& args) {
-		METHOD_BEGIN(1);
-		//minMaxLocRet minMaxLoc(const SparseMat& a)
-		cv::SparseMat* a = bea::Convert<cv::SparseMat*>::FromJS(args[0], 0);
+		METHOD_BEGIN(1);	
+		//minMaxLocRet minMaxLoc(const Mat& a)
+		cv::Mat* a = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 		minMaxLocRet fnRetVal;
-		cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, &fnRetVal.minIdx, &fnRetVal.maxIdx);
+		cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, NULL, NULL);
 			
 		return bea::Convert<cv::minMaxLocRet>::ToJS(fnRetVal);
 		METHOD_END();

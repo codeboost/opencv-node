@@ -9,8 +9,6 @@ using namespace cv;
 
 namespace opencvjs {
 
-
-
 	v8::Handle<v8::Value> JMat::at(const v8::Arguments& args) {
 		METHOD_BEGIN(1);
 		//Experimental - not tested
