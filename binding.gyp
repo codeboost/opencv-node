@@ -1,4 +1,4 @@
-{
+	{
 	'targets': [{
 		'target_name': 'addon',
 		'sources': [ 
@@ -44,18 +44,18 @@
 		        	'include_dirs':['$(OPENCV_ROOT)/build/include', '$(OPENCV_ROOT)/build/include/opencv'],
 		        	'library_dirs':['$(OPENCV_ROOT)/build/x86/vc10/staticlib'],
 		          'libraries':[
-								'-lopencv_core242.lib', 
-								'-lopencv_imgproc242.lib', 
-								'-lopencv_calib3d242.lib',
-								'-lopencv_features2d242.lib', 
-								'-lopencv_objdetect242.lib', 
-								'-lopencv_video242.lib', 
-								'-lopencv_highgui242.lib', 
-								'-lopencv_contrib242.lib', 
-								'-lopencv_flann242.lib', 
-								'-lopencv_ml242.lib', 
-								'-lopencv_gpu242.lib', 
-								'-lopencv_legacy242.lib',
+								'-lopencv_core242d.lib', 
+								'-lopencv_imgproc242d.lib', 
+								'-lopencv_calib3d242d.lib',
+								'-lopencv_features2d242d.lib', 
+								'-lopencv_objdetect242d.lib', 
+								'-lopencv_video242d.lib', 
+								'-lopencv_highgui242d.lib', 
+								'-lopencv_contrib242d.lib', 
+								'-lopencv_flann242d.lib', 
+								'-lopencv_ml242d.lib', 
+								'-lopencv_gpu242d.lib', 
+								'-lopencv_legacy242d.lib',
 								'-lzlib.lib',
 								'-llibjasper.lib',
 								'-llibjpeg.lib',
@@ -79,7 +79,7 @@
 			            'RuntimeTypeInfo': 'false',
 			            'ExceptionHandling': '0',
 			            'AdditionalOptions': [
-			              '/MP /EHsc', '/MT'
+			              '/MP /EHsc', '/MTd'
 			            ],
 			          },
 			          'VCLibrarianTool': {
