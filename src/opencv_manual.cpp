@@ -9,6 +9,21 @@ using namespace cv;
 
 namespace opencvjs {
 
+	v8::Handle<v8::Value> JOpenCV::doTick(const v8::Arguments& args){
+	METHOD_BEGIN(0);
+
+#ifdef _WIN32
+	MSG msg;
+	if (GetMessage(&msg, NULL, 0, 0)){
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+#endif
+
+	return args.This();
+	METHOD_END();
+	}
+
 	v8::Handle<v8::Value> JMat::at(const v8::Arguments& args) {
 		METHOD_BEGIN(1);
 		//Experimental - not tested
