@@ -1,7 +1,7 @@
 {
   "name": "opencv-node",
   "description": "Opencv for node",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "homepage": "https://github.com/codeboost/opencv-node",
   "author": "Florin Braghis <florin@libertv.ro>",
   "keywords" : ["opencv"],
