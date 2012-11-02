@@ -34,19 +34,12 @@ channels = [0, 1]
 mask = new cv.Mat
 hist = new cv.Mat
 
-console.log 'Here'
-
 cv.calcHist [hsv], channels, mask, hist, 2, histSize, ranges, true, false
-console.log 'Computed'
-
-
-console.log hist.rows + 'x' + hist.cols
-
 minMax = cv.minMaxLoc hist
 
 tmp = new cv.Mat
-scale = 10
 
+scale = 10
 histImg = tmp.zeros sbins * scale, hbins * 10, cv.CV_8UC3
 
 for h in [0..hbins - 1]
@@ -66,5 +59,5 @@ doATick()
 
 setTimeout ->
 	process.exit -1
-, 1000
+, 5000
 
