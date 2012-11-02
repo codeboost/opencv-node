@@ -13,6 +13,7 @@ namespace opencvjs {
 	METHOD_BEGIN(0);
 
 #ifdef _WIN32
+	//Todo: Very raw, probably better to process all messages in the queue and then return
 	MSG msg;
 	if (GetMessage(&msg, NULL, 0, 0)){
 		TranslateMessage(&msg);
@@ -29,7 +30,7 @@ namespace opencvjs {
 		//Experimental - not tested
 		cv::Mat* _this = bea::Convert<cv::Mat*>::FromJS(args.This(), 0);
 		int i = bea::Convert<int>::FromJS(args[0], 0);
-		int j = bea::Optional<int>::FromJS(args, 0, 0); 
+		int j = bea::Optional<int>::FromJS(args, 1, 0); 
 		v8::Handle<v8::Value> retVal; 	
 			switch(_this->depth()){
 				case CV_8U:

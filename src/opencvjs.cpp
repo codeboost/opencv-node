@@ -3085,7 +3085,7 @@ namespace opencvjs {
 	}
 	
 	v8::Handle<v8::Value> JOpenCV::minMaxLoc(const v8::Arguments& args) {
-		METHOD_BEGIN(1);	
+		METHOD_BEGIN(1);
 		//minMaxLocRet minMaxLoc(const Mat& a)
 		cv::Mat* a = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
 		minMaxLocRet fnRetVal;
@@ -3199,6 +3199,7 @@ namespace opencvjs {
 		obj->exposeMethod("calcBackProject", calcBackProject);
 		obj->exposeMethod("minMaxLoc", minMaxLoc);
 		obj->exposeMethod("cvSmooth", cvSmooth);
+		obj->exposeMethod("doTick", doTick);
 		obj->exposeMethod("discardMats", discardMats);
 		obj->exposeMethod("fillPoly", fillPoly);
 		obj->exposeMethod("getTextSize", getTextSize);
@@ -3576,6 +3577,7 @@ namespace opencvjs {
 		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SCRIPT_SIMPLEX);
 		BEA_DEFINE_CONSTANT(target, FONT_HERSHEY_SCRIPT_COMPLEX);
 		BEA_DEFINE_CONSTANT(target, FONT_ITALIC);
+		BEA_DEFINE_CONSTANT(target, CV_FILLED);
 	}
 	
 }

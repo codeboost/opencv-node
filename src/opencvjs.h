@@ -244,6 +244,7 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> calcBackProject(const v8::Arguments& args);
 			static v8::Handle<v8::Value> minMaxLoc(const v8::Arguments& args);
 			static v8::Handle<v8::Value> cvSmooth(const v8::Arguments& args);
+			static v8::Handle<v8::Value> doTick(const v8::Arguments& args);
 			static v8::Handle<v8::Value> discardMats(const v8::Arguments& args);
 			static v8::Handle<v8::Value> fillPoly(const v8::Arguments& args);
 			static v8::Handle<v8::Value> getTextSize(const v8::Arguments& args);

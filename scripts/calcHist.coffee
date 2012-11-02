@@ -52,20 +52,19 @@ histImg = tmp.zeros sbins * scale, hbins * 10, cv.CV_8UC3
 for h in [0..hbins - 1]
 	for s in [0..sbins - 1]
 		binVal = hist.at h, s
-		
 		intensity = Math.round(binVal * 255 / minMax.maxVal)
-		cv.rectangle histImg, {x: h*scale, y: s*scale}, {x: (h+1)*scale - 1, y: (s+1)*scale - 1}, [255, 0, 0, 0], -1
+		cv.rectangle histImg, {x: h*scale, y: s*scale}, {x: (h+1)*scale - 1, y: (s+1)*scale - 1}, [intensity, intensity, intensity, intensity], -1
 
 cv.namedWindow "H-S Histogram", 1
 cv.imshow "H-S Histogram", histImg
 
-keypress process.stdin
-process.stdin.on 'keypress', (char, key) ->
-	if key.name == 'escape'
-		console.log 'Stopping.'
-		process.exit 0
+doATick = ->
+	cv.doTick();
+	process.nextTick doATick
 
-process.stdin.setRawMode true
-process.stdin.resume()		
-console.log 'Press ESC to stop.'
+doATick()
+
+setTimeout ->
+	process.exit -1
+, 1000
 
