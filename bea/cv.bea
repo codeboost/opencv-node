@@ -40,6 +40,9 @@
 			
 		void dilate(const Mat& src, Mat& dst, const Mat& element, Point anchor=Point(-1, -1), int iterations=1, int borderType=cv::BORDER_CONSTANT, const Scalar& borderValue=cv::morphologyDefaultBorderValue())
 			REQUIRE_SAME_SIZE_TYPE(src, dst);
+			
+		void erode(const Mat& src, Mat& dst, const Mat& element, Point anchor=Point(-1, -1), int iterations=1, int borderType=cv::BORDER_CONSTANT, const Scalar& borderValue=cv::morphologyDefaultBorderValue())
+			REQUIRE_SAME_SIZE_TYPE(src, dst);
 
 		void absdiff(const Mat& src1, const Mat& src2, Mat& dst)
 			REQUIRE_SAME_SIZE_TYPE(src1, src2);
