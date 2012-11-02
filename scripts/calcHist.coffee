@@ -51,13 +51,8 @@ for h in [0..hbins - 1]
 cv.namedWindow "H-S Histogram", 1
 cv.imshow "H-S Histogram", histImg
 
-doATick = ->
-	cv.doTick();
-	process.nextTick doATick
 
-doATick()
+cv.closeOnEsc()
 
-setTimeout ->
-	process.exit -1
-, 5000
-
+#Important on Windows, if you have windows which display stuff.
+cv.runMessageLoop()
