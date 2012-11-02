@@ -315,17 +315,13 @@ class Capturer
 capturer = new Capturer()
 capturer.go()
 
-keypress process.stdin
+cv.closeOnEsc()
+
 process.stdin.on 'keypress', (char, key) ->
-	if key.name == 'escape'
-		console.log 'Stopping.'
-		process.exit 0
-	else if key.name == 'space' or key.name == 'right'
+	if key.name == 'space' or key.name == 'right'
 		capturer.effectRunner.nextEffect()
 	else if key.name == 'left'
 		capturer.effectRunner.prevEffect()
 
-process.stdin.setRawMode true
-process.stdin.resume()		
 console.log 'Press ESC to stop.'
 console.log 'Press space or right/left keys to cycle through effects'

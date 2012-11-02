@@ -30,13 +30,6 @@ for rect in faces
 
 cv.imshow "result_img", result
 
-keypress process.stdin
-process.stdin.on 'keypress', (char, key) ->
-	if key.name == 'escape'
-		console.log 'Stopping.'
-		process.exit 0
-
-process.stdin.setRawMode true
-process.stdin.resume()		
+cv.closeOnEsc()
 console.log 'Press ESC to stop.'
 
