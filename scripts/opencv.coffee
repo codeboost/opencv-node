@@ -1,5 +1,6 @@
 #This should be done in the C++ addon ?
-opencvjs = require '../build/Debug/addon.node'
+opencvjs = require '../build/Release/addon.node'
+
 _ = require 'underscore'
 cv = opencvjs.OpenCV
 Mat = opencvjs.Mat

@@ -1,6 +1,335 @@
 #ifndef OPENCVJS_H
 #define OPENCVJS_H
 #include <v8.h>
+#include "cvcheck.h"
+#include <cv.hpp>
+#include <highgui.h>
+#include "bea.h"
+#include "customTypes.h"
+namespace bea {
+	template<> struct Convert<cv::TermCriteria> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::TermCriteria FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: type, maxCount, epsilon. This will be cast to 'cv::TermCriteria'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::TermCriteria ret;
+			ret.type = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("type")), nArg);
+			ret.maxCount = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("maxCount")), nArg);
+			ret.epsilon = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("epsilon")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::TermCriteria const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("type"), bea::Convert<int>::ToJS(v.type));
+			obj->Set(v8::String::NewSymbol("maxCount"), bea::Convert<int>::ToJS(v.maxCount));
+			obj->Set(v8::String::NewSymbol("epsilon"), bea::Convert<double>::ToJS(v.epsilon));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Point> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Point FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: x, y. This will be cast to 'cv::Point'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Point ret;
+			ret.x = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("x")), nArg);
+			ret.y = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("y")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Point const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("x"), bea::Convert<int>::ToJS(v.x));
+			obj->Set(v8::String::NewSymbol("y"), bea::Convert<int>::ToJS(v.y));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Point2f> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Point2f FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: x, y. This will be cast to 'cv::Point2f'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Point2f ret;
+			ret.x = bea::Convert<float>::FromJS(obj->Get(v8::String::NewSymbol("x")), nArg);
+			ret.y = bea::Convert<float>::FromJS(obj->Get(v8::String::NewSymbol("y")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Point2f const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("x"), bea::Convert<float>::ToJS(v.x));
+			obj->Set(v8::String::NewSymbol("y"), bea::Convert<float>::ToJS(v.y));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Size> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Size FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: width, height. This will be cast to 'cv::Size'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Size ret;
+			ret.width = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("width")), nArg);
+			ret.height = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("height")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Size const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("width"), bea::Convert<int>::ToJS(v.width));
+			obj->Set(v8::String::NewSymbol("height"), bea::Convert<int>::ToJS(v.height));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Size2f> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Size2f FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: width, height. This will be cast to 'cv::Size2f'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Size2f ret;
+			ret.width = bea::Convert<float>::FromJS(obj->Get(v8::String::NewSymbol("width")), nArg);
+			ret.height = bea::Convert<float>::FromJS(obj->Get(v8::String::NewSymbol("height")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Size2f const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("width"), bea::Convert<float>::ToJS(v.width));
+			obj->Set(v8::String::NewSymbol("height"), bea::Convert<float>::ToJS(v.height));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Rect> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Rect FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: x, y, width, height. This will be cast to 'cv::Rect'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Rect ret;
+			ret.x = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("x")), nArg);
+			ret.y = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("y")), nArg);
+			ret.width = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("width")), nArg);
+			ret.height = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("height")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Rect const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("x"), bea::Convert<int>::ToJS(v.x));
+			obj->Set(v8::String::NewSymbol("y"), bea::Convert<int>::ToJS(v.y));
+			obj->Set(v8::String::NewSymbol("width"), bea::Convert<int>::ToJS(v.width));
+			obj->Set(v8::String::NewSymbol("height"), bea::Convert<int>::ToJS(v.height));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Range> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::Range FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: start, end. This will be cast to 'cv::Range'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::Range ret;
+			ret.start = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("start")), nArg);
+			ret.end = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("end")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Range const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("start"), bea::Convert<int>::ToJS(v.start));
+			obj->Set(v8::String::NewSymbol("end"), bea::Convert<int>::ToJS(v.end));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::RotatedRect> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::RotatedRect FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: center, size, angle. This will be cast to 'cv::RotatedRect'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::RotatedRect ret;
+			ret.center = bea::Convert<cv::Point2f>::FromJS(obj->Get(v8::String::NewSymbol("center")), nArg);
+			ret.size = bea::Convert<cv::Size2f>::FromJS(obj->Get(v8::String::NewSymbol("size")), nArg);
+			ret.angle = bea::Convert<float>::FromJS(obj->Get(v8::String::NewSymbol("angle")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::RotatedRect const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("center"), bea::Convert<cv::Point2f>::ToJS(v.center));
+			obj->Set(v8::String::NewSymbol("size"), bea::Convert<cv::Size2f>::ToJS(v.size));
+			obj->Set(v8::String::NewSymbol("angle"), bea::Convert<float>::ToJS(v.angle));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::minMaxLocRet> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return !v.IsEmpty() && v->IsObject();
+		}
+		
+		static cv::minMaxLocRet FromJS(v8::Handle<v8::Value> v, int nArg) {
+			const char* msg = "Object with the following properties expected: minVal, maxVal, minIdx, maxIdx. This will be cast to 'cv::minMaxLocRet'";
+			if (!Is(v)) BEATHROW();
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v->ToObject();
+			cv::minMaxLocRet ret;
+			ret.minVal = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("minVal")), nArg);
+			ret.maxVal = bea::Convert<double>::FromJS(obj->Get(v8::String::NewSymbol("maxVal")), nArg);
+			ret.minIdx = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("minIdx")), nArg);
+			ret.maxIdx = bea::Convert<int>::FromJS(obj->Get(v8::String::NewSymbol("maxIdx")), nArg);
+			return ret;
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::minMaxLocRet const& v) {
+			v8::HandleScope scope;
+			v8::Local<v8::Object> obj = v8::Object::New();
+			obj->Set(v8::String::NewSymbol("minVal"), bea::Convert<double>::ToJS(v.minVal));
+			obj->Set(v8::String::NewSymbol("maxVal"), bea::Convert<double>::ToJS(v.maxVal));
+			obj->Set(v8::String::NewSymbol("minIdx"), bea::Convert<int>::ToJS(v.minIdx));
+			obj->Set(v8::String::NewSymbol("maxIdx"), bea::Convert<int>::ToJS(v.maxIdx));
+			return scope.Close(obj);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::Mat*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::Mat>::Is(v);
+		}
+		
+		static cv::Mat* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::Mat>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::Mat* const& v) {
+			return bea::ExposedClass<cv::Mat>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::VideoCapture*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::VideoCapture>::Is(v);
+		}
+		
+		static cv::VideoCapture* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::VideoCapture>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::VideoCapture* const& v) {
+			return bea::ExposedClass<cv::VideoCapture>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::VideoWriter*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::VideoWriter>::Is(v);
+		}
+		
+		static cv::VideoWriter* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::VideoWriter>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::VideoWriter* const& v) {
+			return bea::ExposedClass<cv::VideoWriter>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::SparseMat*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::SparseMat>::Is(v);
+		}
+		
+		static cv::SparseMat* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::SparseMat>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::SparseMat* const& v) {
+			return bea::ExposedClass<cv::SparseMat>::ToJS(v);
+		}
+		
+	};
+	
+	template<> struct Convert<cv::CascadeClassifier*> {
+		static bool Is(v8::Handle<v8::Value> v) {
+			return bea::ExposedClass<cv::CascadeClassifier>::Is(v);
+		}
+		
+		static cv::CascadeClassifier* FromJS(v8::Handle<v8::Value> v, int nArg) {
+			return bea::ExposedClass<cv::CascadeClassifier>::FromJS(v, nArg);
+		}
+		
+		static v8::Handle<v8::Value> ToJS(cv::CascadeClassifier* const& v) {
+			return bea::ExposedClass<cv::CascadeClassifier>::ToJS(v);
+		}
+		
+	};
+	
+}
+
 namespace opencvjs {
 	class JMat {
 		protected:
