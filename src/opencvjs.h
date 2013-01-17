@@ -6,6 +6,8 @@
 #include <highgui.h>
 #include "bea.h"
 #include "customTypes.h"
+#include <node.h>
+#include <node_buffer.h>
 namespace bea {
 	template<> struct Convert<cv::TermCriteria> {
 		static bool Is(v8::Handle<v8::Value> v) {
@@ -574,6 +576,7 @@ namespace opencvjs {
 			static v8::Handle<v8::Value> calcBackProject(const v8::Arguments& args);
 			static v8::Handle<v8::Value> minMaxLoc(const v8::Arguments& args);
 			static v8::Handle<v8::Value> cvSmooth(const v8::Arguments& args);
+			static v8::Handle<v8::Value> imencode(const v8::Arguments& args);
 			static v8::Handle<v8::Value> doTick(const v8::Arguments& args);
 			static v8::Handle<v8::Value> discardMats(const v8::Arguments& args);
 			static v8::Handle<v8::Value> fillPoly(const v8::Arguments& args);

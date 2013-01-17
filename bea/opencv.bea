@@ -10,6 +10,8 @@
 	\#include <highgui.h>
 	\#include "bea.h"
 	\#include "customTypes.h"	
+	\#include <node.h>	
+	\#include <node_buffer.h>
 
 #C++ code added to the cpp file	
 @cpp

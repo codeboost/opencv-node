@@ -2891,6 +2891,7 @@ namespace opencvjs {
 		obj->exposeMethod("calcBackProject", calcBackProject);
 		obj->exposeMethod("minMaxLoc", minMaxLoc);
 		obj->exposeMethod("cvSmooth", cvSmooth);
+		obj->exposeMethod("imencode", imencode);
 		obj->exposeMethod("doTick", doTick);
 		obj->exposeMethod("discardMats", discardMats);
 		obj->exposeMethod("fillPoly", fillPoly);
