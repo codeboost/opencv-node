@@ -2592,6 +2592,16 @@ namespace opencvjs {
 		METHOD_END();
 	}
 	
+	v8::Handle<v8::Value> JOpenCV::imdecode(const v8::Arguments& args) {
+		METHOD_BEGIN(2);
+		//Mat imdecode(const Mat& buf, int flags)
+		cv::Mat* buf = bea::Convert<cv::Mat*>::FromJS(args[0], 0);
+		int flags = bea::Convert<int>::FromJS(args[1], 1);
+		cv::Mat* fnRetVal = new cv::Mat(cv::imdecode(*buf, flags));
+		return bea::Convert<cv::Mat*>::ToJS(fnRetVal);
+		METHOD_END();
+	}
+	
 	v8::Handle<v8::Value> JOpenCV::imread(const v8::Arguments& args) {
 		METHOD_BEGIN(1);
 		//Mat imread(const std::string& filename, int flags=1)

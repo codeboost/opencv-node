@@ -1,4 +1,9 @@
+#include <cv.hpp>
+#include "bea.h"
+#include "cvcheck.h"
 #include "opencvjs.h"
+#include "customTypes.h"
+#include <cv.h>
 
 using namespace cv;
 
@@ -179,22 +184,5 @@ namespace opencvjs {
 		return actualBuffer;
 		METHOD_END();
 	}
-	
-		v8::Handle<v8::Value> JOpenCV::imdecode(const v8::Arguments& args) {
-		METHOD_BEGIN(2);
-		//Mat imdecode(const node::Buffer& buf, int flags)
-		v8::Local<v8::Object> bufferObj = args[0]->ToObject();
-    char* bufferData = node::Buffer::Data(bufferObj);
-    size_t bufferLength = node::Buffer::Length(bufferObj);
-		int flags = bea::Convert<int>::FromJS(args[1], 1);
-		
-		std::vector<uchar> vecVal(bufferLength);
-		memcpy(&vecVal[0], bufferData, bufferLength);
-		
-		cv::Mat* fnRetVal = new cv::Mat(cv::imdecode(vecVal, flags));
-		
-		return v8::External::New(fnRetVal);
-		METHOD_END();
-	}	
 	
 }
