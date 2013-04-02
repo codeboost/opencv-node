@@ -26,6 +26,14 @@ Installation - MacOS X
 
 (tested with GCC 4.2.1 and node 0.8.0)
 
+Troubleshooting
+
+If brew complains "SHA1 mismatch" error you may find that updating homebrew fixes the issue:
+  $ brew update
+
+If brew complains "No available formula" you will need to tap the science repository:
+  $ brew tap homebrew/science
+
 Installation - Windows 
 =======================
 1. Download OpenCV from http://sourceforge.net/projects/opencvlibrary/files/latest/download
