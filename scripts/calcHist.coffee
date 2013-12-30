@@ -35,7 +35,7 @@ mask = new cv.Mat
 hist = new cv.Mat
 
 cv.calcHist [hsv], channels, mask, hist, 2, histSize, ranges, true, false
-minMax = cv.minMaxLoc hist
+minMax = cv.minMaxIdx hist
 
 tmp = new cv.Mat
 

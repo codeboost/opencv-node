@@ -36,11 +36,17 @@
 		Size2f size
 		float angle
 
+	@type minMaxIdxRet
+		double minVal
+		double maxVal
+		int minIdx
+		int maxIdx
+
 	@type minMaxLocRet
 		double minVal
 		double maxVal 
-		int minIdx 
-		int maxIdx
+		Point minLoc
+		Point maxLoc
 		
 	@type Scalar 
 	@type std::string

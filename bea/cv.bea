@@ -317,11 +317,18 @@
 				}
 				cv::calcBackProject(&arrays[0], arrays.size(), &channels[0], *hist, *backProject, (const float**)&vrangs[0], scale, uniform);
 
-		minMaxLocRet minMaxLoc(const Mat& a);
-			#@orgapi void minMaxLoc(const Mat& a, double* minVal, double* maxVal, int* minIdx=0, int* maxIdx=0 )
+		minMaxLocRet minMaxLoc(const Mat& a, const Mat& mask=cv::Mat());
+			#@orgapi void minMaxLoc(InputArray src, double* minVal, double* maxVal=0, Point* minLoc=0, Point* maxLoc=0, InputArray mask=noArray())
 			@call
 				minMaxLocRet fnRetVal;
-				cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, NULL, NULL);
+				cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, &fnRetVal.minLoc, &fnRetVal.maxLoc, *mask);
+
+		minMaxIdxRet minMaxIdx(const Mat& a, const Mat& mask=cv::Mat());
+			#@orgapi void minMaxIdx(InputArray src, double* minVal, double* maxVal, int* minIdx=0, int* maxIdx=0, InputArray mask=noArray())
+			@call
+				minMaxIdxRet fnRetVal;
+				cv::minMaxIdx(*a, &fnRetVal.minVal, &fnRetVal.maxVal, &fnRetVal.minIdx, &fnRetVal.maxIdx, *mask);
+
 
 		@manual void cvSmooth(const Mat& src, Mat& dst, int smoothtype=CV_GAUSSIAN, int param1=3, int param2=0, double param3=0, double param4=0)
 		

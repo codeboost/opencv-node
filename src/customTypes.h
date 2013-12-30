@@ -6,16 +6,26 @@
 
 namespace cv{
 
-		//Helper structure used as return type for the function mixMaxLoc
-		struct minMaxLocRet{
-			double minVal;
-			double maxVal; 
-			int minIdx;
-			int maxIdx;
-			minMaxLocRet(){
-				minVal = maxVal = 0.0;
-				minIdx = maxIdx = 0; 
-			}
+	//Helper structure used as return type for the function mixMaxLoc
+	struct minMaxIdxRet{
+		double minVal;
+		double maxVal;
+		int minIdx;
+		int maxIdx;
+		minMaxIdxRet(){
+			minVal = maxVal = 0.0;
+			minIdx = maxIdx = 0;
+		}
+	};
+	struct minMaxLocRet{
+		double minVal;
+		double maxVal;
+		Point minLoc;
+		Point maxLoc;
+		minMaxLocRet(){
+			minVal = maxVal = 0.0;
+			minLoc = maxLoc = cv::Point(0, 0);
+		}
 	};
 }
 
