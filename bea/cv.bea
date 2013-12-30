@@ -323,6 +323,8 @@
 				minMaxLocRet fnRetVal;
 				cv::minMaxLoc(*a, &fnRetVal.minVal, &fnRetVal.maxVal, NULL, NULL);
 
+		void matchTemplate(const Mat& image, const Mat& templ, const Mat& result, int method);
+
 		@manual void cvSmooth(const Mat& src, Mat& dst, int smoothtype=CV_GAUSSIAN, int param1=3, int param2=0, double param3=0, double param4=0)
 		
 		
