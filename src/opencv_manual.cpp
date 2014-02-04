@@ -164,4 +164,25 @@ namespace opencvjs {
 		METHOD_END();
 	}
 	
+	v8::Handle<v8::Value> JOpenCV::imencode(const v8::Arguments& args) {
+		METHOD_BEGIN(2);
+		//node::Buffer imencode(const std::string& ext, const Mat& img, const std::vector<int>& params=std::vector<int>())
+		std::string ext = bea::Convert<std::string>::FromJS(args[0], 0);
+		cv::Mat* img = bea::Convert<cv::Mat*>::FromJS(args[1], 1);
+		std::vector<int> params = bea::Optional<std::vector<int> >::FromJS(args, 2, std::vector<int>());
+		std::vector<uchar> vecVal;
+		cv::imencode(ext, *img, vecVal, params);
+		node::Buffer *buf = node::Buffer::New(vecVal.size());
+		uchar* data = (uchar*) node::Buffer::Data(buf);
+		memcpy(data, &vecVal[0], vecVal.size());
+		
+		v8::Local<v8::Object> globalObj = v8::Context::GetCurrent()->Global();
+		v8::Local<v8::Function> bufferConstructor = v8::Local<v8::Function>::Cast(globalObj->Get(v8::String::New("Buffer")));
+		v8::Handle<v8::Value> constructorArgs[3] = {buf->handle_, v8::Integer::New(vecVal.size()), v8::Integer::New(0)};
+		v8::Local<v8::Object> actualBuffer = bufferConstructor->NewInstance(3, constructorArgs);
+			
+		return actualBuffer;
+		METHOD_END();
+	}
+	
 }
